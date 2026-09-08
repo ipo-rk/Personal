@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Devp Rick11 — Product Designer & Frontend Developer</title>
+  <meta name="description"
+    content="Portofolio Devp Rick11, Product Designer & Frontend Developer yang fokus pada antarmuka soft-UI, sistem desain, dan produk digital.">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Alpine.js Intersect plugin (harus dimuat sebelum core) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+  <!-- Alpine.js core -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Konfigurasi kecil Tailwind lewat CSS var agar konsisten dengan style.css */
+    body {
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+
+<body class="relative min-h-screen overflow-x-hidden" x-data="siteShell" x-cloak>
+
+  <div id="cursor-glow"></div>
+
+  <!-- ============ NAVBAR ============ -->
+  <header class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-5xl">
+    <nav class="neu-flat-sm flex items-center justify-between px-5 py-3 md:px-7 md:py-3.5">
+      <a href="#beranda" @click.prevent="scrollTo('beranda')" class="font-display font-semibold text-lg tracking-tight">
+        Devp<span class="text-accent">.</span>Rick11
+      </a>
+
+      <ul class="hidden md:flex items-center gap-1 text-sm text-muted">
+        <template x-for="item in [
+            {id:'beranda', label:'Beranda'},
+            {id:'tentang', label:'Tentang'},
+            {id:'keahlian', label:'Keahlian'},
+            {id:'proyek', label:'Proyek'},
+            {id:'pengalaman', label:'Pengalaman'},
+          ]" :key="item.id">
+          <li>
+            <button @click="scrollTo(item.id)" class="px-4 py-2 rounded-full transition-colors"
+              :class="activeSection === item.id ? 'text-accent bg-[var(--accent-soft)]' : 'hover:text-[var(--text)]'"
+              x-text="item.label"></button>
+          </li>
+        </template>
+      </ul>
+
+      <div class="flex items-center gap-3">
+        <button @click="scrollTo('kontak')" class="hidden sm:inline-flex btn-primary text-sm !py-2.5 !px-5">
+          Hubungi saya
+        </button>
+        <button @click="mobileOpen = !mobileOpen" class="md:hidden neu-icon-btn !w-10 !h-10" aria-label="Buka menu">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" x-show="!mobileOpen" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" x-show="mobileOpen" />
+          </svg>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Menu mobile -->
+    <div x-show="mobileOpen" x-transition x-cloak class="neu-flat-sm mt-3 p-4 md:hidden">
+      <ul class="flex flex-col gap-1 text-sm">
+        <template x-for="item in [
+            {id:'beranda', label:'Beranda'},
+            {id:'tentang', label:'Tentang'},
+            {id:'keahlian', label:'Keahlian'},
+            {id:'proyek', label:'Proyek'},
+            {id:'pengalaman', label:'Pengalaman'},
+            {id:'kontak', label:'Kontak'},
+          ]" :key="item.id">
+          <li>
+            <button @click="scrollTo(item.id)"
+              class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-[var(--accent-soft)] hover:text-accent"
+              x-text="item.label"></button>
+          </li>
+        </template>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section id="beranda" class="relative pt-40 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
+    <div class="grid md:grid-cols-[1.1fr_0.9fr] gap-16 items-center">
+
+      <!-- Teks -->
+      <div class="hero-seq relative z-10">
+        <div class="inline-flex items-center gap-2 neu-flat-sm px-4 py-2 text-xs text-muted mb-7">
+          <span class="status-dot"></span>
+          Tersedia untuk proyek baru — mulai November 2026
+        </div>
+
+        <h1 class="font-display font-semibold leading-[1.05] text-4xl sm:text-5xl lg:text-[3.4rem] mb-6">
+          Merancang antarmuka yang terasa
+          <span class="text-accent">nyaman disentuh.</span>
+        </h1>
+
+        <p class="max-prose text-muted text-base sm:text-lg leading-relaxed mb-9">
+          Saya Devp Rick11, Product Designer & Frontend Developer asal Jakarta.
+          Lima tahun terakhir saya membangun sistem desain dan antarmuka soft-UI
+          untuk produk fintech, kesehatan, dan gaya hidup — dari riset hingga baris kode terakhir.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-4 mb-10">
+          <button @click="scrollTo('proyek')" class="btn-primary">Lihat karya saya</button>
+          <button x-data="projectModal" @click="downloadCv()" class="btn-ghost">Unduh CV</button>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <a href="https://github.com" target="_blank" rel="noopener" class="neu-icon-btn" aria-label="GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 .5C5.73.5.98 5.24.98 11.5c0 4.86 3.15 8.98 7.52 10.43.55.1.75-.24.75-.53v-1.87c-3.06.66-3.7-1.48-3.7-1.48-.5-1.27-1.22-1.61-1.22-1.61-.99-.68.08-.67.08-.67 1.1.08 1.68 1.13 1.68 1.13.98 1.68 2.57 1.2 3.2.92.1-.71.38-1.2.7-1.48-2.44-.28-5-1.22-5-5.44 0-1.2.43-2.19 1.13-2.96-.11-.28-.49-1.4.11-2.92 0 0 .93-.3 3.04 1.13a10.6 10.6 0 015.53 0c2.11-1.43 3.04-1.13 3.04-1.13.6 1.52.22 2.64.11 2.92.7.77 1.13 1.76 1.13 2.96 0 4.23-2.57 5.16-5.02 5.43.39.34.74 1.01.74 2.03v3.01c0 .29.2.64.76.53A10.99 10.99 0 0023 11.5C23 5.24 18.27.5 12 .5z" />
+            </svg>
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener" class="neu-icon-btn" aria-label="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.86 0-2.15 1.45-2.15 2.94v5.66H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.11 20.45H3.56V9h3.55v11.45z" />
+            </svg>
+          </a>
+          <a href="https://dribbble.com" target="_blank" rel="noopener" class="neu-icon-btn" aria-label="Dribbble">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0a12 12 0 1012 12A12 12 0 0012 0zM9.9 3.02a15.4 15.4 0 013.3 4.6 20.6 20.6 0 01-5.66 1.13A9.98 9.98 0 019.9 3.02zm-3.6 3.1a11.94 11.94 0 006.16-.72c.3.63.57 1.28.82 1.94-3.32.94-6.25 2.9-8.4 5.5a9.95 9.95 0 011.42-6.72zm-1.5 8.5c1.98-2.5 4.75-4.3 7.94-5.16.2.6.37 1.2.52 1.82-2.8.86-5.06 2.9-6.14 5.56a9.98 9.98 0 01-2.32-2.22zm4.05 3.86c.95-2.6 2.98-4.5 5.5-5.32.4 2.1.5 4.28.28 6.4a9.9 9.9 0 01-5.78-1.08zm7.66.03a24.6 24.6 0 00-.3-6.34c.7-.1 1.4-.14 2.13-.14a9.9 9.9 0 011.87.18 9.98 9.98 0 01-3.7 6.3zm3.9-8.2a12.3 12.3 0 00-2.32-.18c-.86 0-1.7.06-2.5.19a17.6 17.6 0 00-.9-2.08 12.06 12.06 0 003.9-2.63 9.94 9.94 0 011.82 4.7z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Visual -->
+      <div class="relative flex items-center justify-center">
+        <div class="accent-glow w-72 h-72 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+
+        <svg class="spin-slow absolute w-[340px] h-[340px] opacity-30" viewBox="0 0 340 340" fill="none">
+          <circle cx="170" cy="170" r="165" stroke="var(--accent)" stroke-width="1" stroke-dasharray="2 10" />
+        </svg>
+
+        <div class="hero-portrait neu-convex w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center relative z-10">
+          <div class="w-[88%] h-[88%] rounded-full overflow-hidden neu-inset flex items-end justify-center">
+            <svg viewBox="0 0 200 200" class="w-[92%] h-[92%] translate-y-2" fill="none">
+              <circle cx="100" cy="72" r="34" fill="#2a3040" />
+              <path d="M40 190c6-42 34-66 60-66s54 24 60 66" fill="#2a3040" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="neu-flat-sm float-slow absolute -left-4 sm:-left-8 top-6 px-4 py-3 z-20">
+          <p class="font-display font-semibold text-xl text-accent">5+</p>
+          <p class="text-xs text-muted">tahun pengalaman</p>
+        </div>
+
+        <div class="neu-flat-sm float-slower absolute -right-2 sm:-right-6 bottom-8 px-4 py-3 z-20">
+          <p class="font-display font-semibold text-xl text-accent">50+</p>
+          <p class="text-xs text-muted">proyek selesai</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TENTANG ============ -->
+  <section id="tentang" class="px-6 md:px-12 max-w-7xl mx-auto py-20">
+    <div x-data="reveal" class="grid md:grid-cols-2 gap-14 items-center">
+
+      <div class="grid grid-cols-2 gap-5">
+        <div class="neu-flat p-6">
+          <p class="font-display text-3xl font-semibold text-accent mb-1">32</p>
+          <p class="text-sm text-muted">klien lintas industri</p>
+        </div>
+        <div class="neu-flat p-6 mt-8">
+          <p class="font-display text-3xl font-semibold text-accent mb-1">98%</p>
+          <p class="text-sm text-muted">tingkat kepuasan klien</p>
+        </div>
+        <div class="neu-flat p-6">
+          <p class="font-display text-3xl font-semibold text-accent mb-1">12</p>
+          <p class="text-sm text-muted">penghargaan desain</p>
+        </div>
+        <div class="neu-flat p-6 mt-8">
+          <p class="font-display text-3xl font-semibold text-accent mb-1">5</p>
+          <p class="text-sm text-muted">tahun di industri produk digital</p>
+        </div>
+      </div>
+
+      <div>
+        <p class="text-accent text-sm font-medium mb-3">Tentang saya</p>
+        <h2 class="font-display font-semibold text-3xl sm:text-4xl mb-6 leading-tight">
+          Saya percaya antarmuka terbaik hampir tidak terlihat sebagai desain.
+        </h2>
+        <p class="text-muted leading-relaxed mb-4 max-prose">
+          Perjalanan saya dimulai dari mengutak-atik CSS pada 2019, lalu berlanjut ke riset pengguna
+          dan sistem desain untuk perusahaan rintisan fintech di Jakarta. Sejak itu saya berfokus
+          pada gaya soft-UI dan neumorphism — pendekatan yang menuntut kedisiplinan tinggi pada
+          pencahayaan, kontras, dan aksesibilitas agar tetap nyaman digunakan.
+        </p>
+        <p class="text-muted leading-relaxed max-prose">
+          Di luar layar, saya mengajar kelas desain UI dasar untuk komunitas developer di Jakarta
+          dan menulis catatan singkat tentang detail interaksi yang sering terlewat.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ KEAHLIAN ============ -->
+  <section id="keahlian" class="px-6 md:px-12 max-w-7xl mx-auto py-20">
+    <div x-data="reveal" class="mb-14 max-w-xl">
+      <p class="text-accent text-sm font-medium mb-3">Keahlian</p>
+      <h2 class="font-display font-semibold text-3xl sm:text-4xl leading-tight">Alat dan bahasa yang saya pakai setiap
+        hari</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <template x-for="skill in [
+          {name:'HTML5 & CSS3', level:95},
+          {name:'Tailwind CSS', level:92},
+          {name:'JavaScript & Alpine.js', level:88},
+          {name:'Figma & Desain Sistem', level:94},
+          {name:'UI/UX Research', level:85},
+          {name:'React', level:78},
+          {name:'Desain Responsif', level:96},
+          {name:'Git & Kolaborasi Tim', level:90},
+        ]" :key="skill.name">
+        <div class="neu-flat p-6 flex flex-col items-center text-center gap-4" x-data="skillRing(skill.level)">
+          <svg class="ring-progress w-24 h-24" viewBox="0 0 90 90">
+            <circle cx="45" cy="45" r="40" fill="none" stroke="var(--shadow-dark)" stroke-width="7" />
+            <circle x-ref="bar" class="bar" cx="45" cy="45" r="40" fill="none" stroke="var(--accent)" stroke-width="7"
+              stroke-linecap="round" />
+          </svg>
+          <p class="font-display font-medium text-sm" x-text="skill.name"></p>
+          <p class="text-xs text-muted" x-text="skill.level + '% penguasaan'"></p>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- ================= PROYEK ================= -->
+  <section id="proyek" class="px-6 md:px-12 max-w-7xl mx-auto py-20" x-data="{
+      filter: 'Semua',
+      projects: [
+        { title: 'Nimbus Finance', category: 'Web App', desc: 'Dasbor manajemen keuangan pribadi dengan visualisasi data real-time.', tags: ['React','Node.js','PostgreSQL'] },
+        { title: 'Kopi Senja', category: 'UI/UX', desc: 'Desain ulang identitas digital untuk jaringan kedai kopi lokal.', tags: ['Figma','Design System'] },
+        { title: 'Ruang Belajar', category: 'Web App', desc: 'Platform kelas daring dengan sistem progres dan sertifikat otomatis.', tags: ['Laravel','Tailwind','MySQL'] },
+        { title: 'Pasar Dekat', category: 'Mobile', desc: 'Aplikasi belanja kebutuhan harian dari pasar tradisional terdekat.', tags: ['React Native','Firebase'] },
+        { title: 'Studio Karya', category: 'UI/UX', desc: 'Portofolio interaktif untuk agensi kreatif dengan micro-interaction.', tags: ['Figma','Prototyping'] },
+        { title: 'Logix Warehouse', category: 'Web App', desc: 'Sistem manajemen inventaris gudang skala menengah.', tags: ['Node.js','Express','MongoDB'] },
+      ]
+    }">
+    <div class="text-center max-w-xl mx-auto mb-10 reveal" x-intersect.once="$el.classList.add('in-view')">
+      <p class="text-accent font-semibold text-sm mb-3">Karya Terpilih</p>
+      <h2 class="font-display text-3xl sm:text-4xl font-semibold">Proyek yang pernah saya kerjakan</h2>
+      <span class="grow-line accent-gradient mt-4 mx-auto" x-intersect.once="$el.classList.add('in-view')"></span>
+    </div>
+
+    <div class="flex justify-center mb-12">
+      <div class="neu-inset-sm inline-flex flex-wrap justify-center gap-1 p-1.5">
+        <template x-for="cat in ['Semua','Web App','UI/UX','Mobile']" :key="cat">
+          <button @click="filter = cat" class="neu-tab px-5 py-2 text-sm focus-ring"
+            :class="{ 'active': filter === cat }" x-text="cat"></button>
+        </template>
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <template x-for="(project, pi) in projects.filter(p => filter === 'Semua' || p.category === filter)"
+        :key="project.title">
+        <div class="reveal" x-intersect.once="$el.classList.add('in-view')" :style="`transition-delay:${(pi%3)*100}ms`">
+          <div class="tilt neu-card p-6 flex flex-col h-full" x-data="{ rx:0, ry:0 }"
+            @mousemove="const r=$el.getBoundingClientRect(); const px=(($event.clientX-r.left)/r.width)-0.5; const py=(($event.clientY-r.top)/r.height)-0.5; ry=px*10; rx=py*-10;"
+            @mouseleave="rx=0; ry=0" :style="`transform: perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg)`">
+            <div class="neu-inset h-32 mb-5 flex items-center justify-center">
+              <span class="font-display text-xl font-semibold text-accent"
+                x-text="project.title.split(' ').map(w => w[0]).join('')"></span>
+            </div>
+            <p class="text-xs font-semibold text-accent mb-2" x-text="project.category"></p>
+            <h3 class="font-display font-semibold text-lg mb-2" x-text="project.title"></h3>
+            <p class="text-sm text-muted leading-relaxed mb-5" x-text="project.desc"></p>
+            <div class="flex flex-wrap gap-2 mt-auto">
+              <template x-for="tag in project.tags" :key="tag">
+                <span class="neu-flat text-xs px-3 py-1.5 rounded-full text-muted" x-text="tag"></span>
+              </template>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- ============ PENGALAMAN ============ -->
+  <section id="pengalaman" class="px-6 md:px-12 max-w-7xl mx-auto py-20">
+    <div x-data="reveal" class="mb-14 max-w-xl">
+      <p class="text-accent text-sm font-medium mb-3">Perjalanan karier</p>
+      <h2 class="font-display font-semibold text-3xl sm:text-4xl leading-tight">Pengalaman kerja</h2>
+    </div>
+
+    <div class="relative pl-10">
+      <div class="timeline-line absolute left-[7px] top-1 bottom-1 w-[2px]" style="background:var(--shadow-light)">
+      </div>
+
+      <template x-for="job in [
+          {role:'Lead Product Designer', place:'Nimbus Fintech', period:'2023 — Sekarang', desc:'Memimpin tim desain 4 orang, membangun sistem desain internal, dan menaikkan skor kegunaan aplikasi sebesar 34%.'},
+          {role:'Frontend Developer & Desainer UI', place:'Studio Loka', period:'2021 — 2023', desc:'Menerjemahkan desain menjadi antarmuka responsif menggunakan Tailwind CSS dan Alpine.js untuk klien e-commerce.'},
+          {role:'Junior UI Designer', place:'Kreasi Digital Nusantara', period:'2019 — 2021', desc:'Mendesain landing page dan aset pemasaran untuk lebih dari 20 klien UMKM lokal.'},
+        ]" :key="job.role">
+        <div class="relative mb-10 last:mb-0" x-data="reveal">
+          <span class="absolute -left-10 top-1.5 w-4 h-4 rounded-full"
+            style="background:var(--accent); box-shadow:0 0 0 4px var(--bg)"></span>
+          <div class="neu-flat p-6">
+            <div class="flex flex-wrap items-baseline justify-between gap-2 mb-2">
+              <h3 class="font-display font-semibold text-lg" x-text="job.role"></h3>
+              <span class="text-xs text-muted" x-text="job.period"></span>
+            </div>
+            <p class="text-accent text-sm mb-3" x-text="job.place"></p>
+            <p class="text-muted text-sm leading-relaxed" x-text="job.desc"></p>
+          </div>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <!-- ============ KONTAK ============ -->
+  <section id="kontak" class="px-6 md:px-12 max-w-7xl mx-auto py-20">
+    <div x-data="reveal" class="neu-flat p-8 sm:p-12 grid md:grid-cols-[0.9fr_1.1fr] gap-12">
+
+      <div>
+        <p class="text-accent text-sm font-medium mb-3">Kontak</p>
+        <h2 class="font-display font-semibold text-3xl sm:text-4xl leading-tight mb-5">
+          Punya proyek dalam pikiran? Mari bicarakan.
+        </h2>
+        <p class="text-muted leading-relaxed mb-8 max-prose">
+          Saya membuka slot terbatas untuk kolaborasi lepas mulai November 2026.
+          Ceritakan kebutuhan Anda, saya akan membalas dalam 1–2 hari kerja.
+        </p>
+
+        <div class="space-y-4">
+          <div class="flex items-center gap-4">
+            <div class="neu-icon-btn shrink-0">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M3 8l9 6 9-6M4 5h16a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V6a1 1 0 011-1z"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-xs text-muted">Email</p>
+              <p class="text-sm">halo@devprick11.id</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="neu-icon-btn shrink-0">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M21 10.5c0 6-9 12-9 12s-9-6-9-12a9 9 0 1118 0z" stroke-linecap="round"
+                  stroke-linejoin="round" />
+                <circle cx="12" cy="10.5" r="2.6" />
+              </svg>
+            </div>
+            <div>
+              <p class="text-xs text-muted">Lokasi</p>
+              <p class="text-sm">Jakarta, Indonesia</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form x-data="contactForm" @submit.prevent="submit" class="space-y-5">
+        <div>
+          <label class="text-xs text-muted mb-2 block">Nama</label>
+          <input x-model="form.name" type="text" placeholder="Nama lengkap Anda"
+            class="neu-inset w-full px-5 py-3.5 bg-transparent outline-none text-sm placeholder:text-[var(--text-muted)]">
+        </div>
+        <div>
+          <label class="text-xs text-muted mb-2 block">Email</label>
+          <input x-model="form.email" type="email" placeholder="nama@email.com"
+            class="neu-inset w-full px-5 py-3.5 bg-transparent outline-none text-sm placeholder:text-[var(--text-muted)]">
+        </div>
+        <div>
+          <label class="text-xs text-muted mb-2 block">Pesan</label>
+          <textarea x-model="form.message" rows="4" placeholder="Ceritakan proyek Anda secara singkat"
+            class="neu-inset w-full px-5 py-3.5 bg-transparent outline-none text-sm resize-none placeholder:text-[var(--text-muted)]"></textarea>
+        </div>
+        <button type="submit" class="btn-primary w-full sm:w-auto" :disabled="sending">
+          <span x-show="!sending">Kirim pesan</span>
+          <span x-show="sending" x-cloak>Mengirim…</span>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="px-6 md:px-12 max-w-7xl mx-auto pb-10">
+    <div class="neu-flat-sm px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <p class="text-xs text-muted">© 2026 Devp Rick11. Dibuat dengan Tailwind CSS & Alpine.js.</p>
+      <div class="flex items-center gap-3">
+        <a href="https://github.com" target="_blank" rel="noopener" class="neu-icon-btn !w-10 !h-10"
+          aria-label="GitHub">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 .5C5.73.5.98 5.24.98 11.5c0 4.86 3.15 8.98 7.52 10.43.55.1.75-.24.75-.53v-1.87c-3.06.66-3.7-1.48-3.7-1.48-.5-1.27-1.22-1.61-1.22-1.61-.99-.68.08-.67.08-.67 1.1.08 1.68 1.13 1.68 1.13.98 1.68 2.57 1.2 3.2.92.1-.71.38-1.2.7-1.48-2.44-.28-5-1.22-5-5.44 0-1.2.43-2.19 1.13-2.96-.11-.28-.49-1.4.11-2.92 0 0 .93-.3 3.04 1.13a10.6 10.6 0 015.53 0c2.11-1.43 3.04-1.13 3.04-1.13.6 1.52.22 2.64.11 2.92.7.77 1.13 1.76 1.13 2.96 0 4.23-2.57 5.16-5.02 5.43.39.34.74 1.01.74 2.03v3.01c0 .29.2.64.76.53A10.99 10.99 0 0023 11.5C23 5.24 18.27.5 12 .5z" />
+          </svg>
+        </a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener" class="neu-icon-btn !w-10 !h-10"
+          aria-label="LinkedIn">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.86 0-2.15 1.45-2.15 2.94v5.66H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.38 4.28 5.47v6.27zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.11 20.45H3.56V9h3.55v11.45z" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Tombol kembali ke atas -->
+  <button x-show="showTop" x-transition x-cloak @click="scrollTop"
+    class="neu-icon-btn fixed bottom-7 right-7 z-50 !w-12 !h-12" aria-label="Kembali ke atas">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 19V5M5 12l7-7 7 7" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
