@@ -12,13 +12,21 @@ document.addEventListener('alpine:init', () => {
     activeSection: 'beranda',
 
     init() {
+      // Throttle via requestAnimationFrame agar scroll tetap mulus di perangkat mobile.
+      let ticking = false;
       const onScroll = () => {
-        this.scrolled = window.scrollY > 12;
-        this.showTop = window.scrollY > 480;
-        this.updateActiveSection();
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          this.scrolled = window.scrollY > 12;
+          this.showTop = window.scrollY > 480;
+          this.updateActiveSection();
+          ticking = false;
+        });
       };
       onScroll();
       window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
 
       // Cursor glow ambient (desktop saja)
       const glow = document.getElementById('cursor-glow');
