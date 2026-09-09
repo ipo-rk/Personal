@@ -732,6 +732,59 @@ svg {
 }
 
 /* =========================================================
+   22. FLOATING ACTION BUTTON (WA — WHATSAPP)
+   ========================================================= */
+.fab-wa {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #2fe066, #1da84c);
+  box-shadow:
+    6px 6px 14px var(--shadow-dark),
+    -4px -4px 12px rgba(255, 255, 255, 0.08);
+  transition:
+    transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 0.3s ease;
+}
+
+.fab-wa:hover {
+  transform: translateY(-4px) scale(1.06);
+  box-shadow:
+    8px 12px 22px rgba(37, 211, 102, 0.35),
+    -4px -4px 14px rgba(255, 255, 255, 0.12);
+}
+
+.fab-wa:active {
+  transform: translateY(0) scale(0.96);
+  box-shadow: inset 2px 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.fab-wa-pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #25d366;
+  opacity: 0;
+  animation: waPulse 2.8s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes waPulse {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* =========================================================
    22. SELECT DROPDOWN
    ========================================================= */
 select option {
@@ -760,39 +813,51 @@ select option {
 }
 
 /* =========================================================
-   24. RESPONSIVE — FINE-TUNING
+   24. RESPONSIVE — FINE-TUNING (100% DEVICE COMPLIANCE)
    ========================================================= */
 
-/* Extra-small (<360px): pastikan tidak ada overflow */
+/* Extra-small (<360px): layar smartphone sangat kecil */
 @media (max-width: 360px) {
   .btn-primary,
   .btn-ghost {
-    padding: 0.75rem 1.25rem;
-    font-size: 0.875rem;
+    padding: 0.7rem 1.1rem;
+    font-size: 0.8rem;
+    width: 100%;
+    justify-content: center;
   }
 
-  /* Badge ukuran diperkecil agar pas di layar sangat kecil tanpa menutupi profil */
+  /* Badge hero diposisikan sangat kompak agar tidak terpotong */
   .float-slow,
   .float-slower {
-    padding: 0.4rem 0.65rem;
-    font-size: 0.7rem;
+    padding: 0.35rem 0.6rem;
+    font-size: 0.65rem;
   }
 
   .float-slow p:first-child,
   .float-slower p:first-child {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+  }
+
+  /* FAB WA lebih fleksibel di layar sempit */
+  .fab-wa {
+    width: 48px;
+    height: 48px;
+    bottom: 1rem;
+    left: 1rem;
   }
 }
 
-/* Mobile (<640px): kursor glow disembunyikan & optimasi float badge */
-@media (max-width: 640px) {
-  #cursor-glow {
-    display: none;
+/* Mobile & Tablet Portrait (<768px): tata letak responsif */
+@media (max-width: 768px) {
+  /* Mencegah tab overflow */
+  .neu-tab {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.8rem;
   }
 
-  /* Timeline: kurangi padding kiri agar konten tidak terpotong */
-  .timeline-left-fix {
-    padding-left: 2rem;
+  /* Hilangkan cursor glow di perangkat sentuh */
+  #cursor-glow {
+    display: none !important;
   }
 
   /* Jaga float badge di mobile agar tetap di luar batas portrait visual */
@@ -801,6 +866,18 @@ select option {
   }
   .float-slower {
     transform-origin: bottom right;
+  }
+
+  /* Padding timeline */
+  .timeline-left-fix {
+    padding-left: 2rem;
+  }
+}
+
+/* Tablet Landscape (<1024px): penyesuaian grid */
+@media (max-width: 1024px) {
+  .neu-card {
+    will-change: auto;
   }
 }
 

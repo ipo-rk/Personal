@@ -1,6 +1,6 @@
 # Devp Rick11 — Premium Neumorphic Portfolio
 
-> **Versi Final** — Portofolio interaktif _Product Designer & Frontend Developer_ dengan konsep **Neumorphism Soft-UI**, performa tinggi, aksesibilitas WCAG 2.1, serta responsif 100% pada semua perangkat (mobile, tablet, desktop).
+> **Versi Final** — Portofolio interaktif _Full Stack Web Developer_ (Mahasiswa USTJ Papua, Alumnus SaCode Papua 2023) dengan konsep **Neumorphism Soft-UI**, performa tinggi, aksesibilitas WCAG 2.1, serta responsif 100% pada semua perangkat (mobile, tablet, desktop).
 
 ---
 

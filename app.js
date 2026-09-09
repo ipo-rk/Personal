@@ -22,37 +22,37 @@ document.addEventListener('alpine:init', () => {
   ];
 
   const skills = [
-    { name: 'HTML5 & CSS3', level: 95 },
-    { name: 'Tailwind CSS', level: 92 },
+    { name: 'Laravel & PHP', level: 92 },
+    { name: 'MySQL Database', level: 89 },
+    { name: 'Tailwind CSS', level: 95 },
     { name: 'JavaScript & Alpine.js', level: 88 },
-    { name: 'Figma & Desain Sistem', level: 94 },
-    { name: 'UI/UX Research', level: 85 },
-    { name: 'React', level: 78 },
-    { name: 'Desain Responsif', level: 96 },
-    { name: 'Git & Kolaborasi Tim', level: 90 },
+    { name: 'HTML5 & CSS3', level: 96 },
+    { name: 'Figma & UI/UX Design', level: 90 },
+    { name: 'REST API & Leaflet.js', level: 86 },
+    { name: 'Git & GitHub Workflow', level: 91 },
   ];
 
   const services = [
     {
-      title: 'UI/UX Design',
-      desc: 'Merancang pengalaman pengguna yang intuitif dan antarmuka yang estetis — dari wireframe, user flow, hingga prototype interaktif yang siap diserahkan ke developer.',
-      tags: ['Figma', 'Prototyping', 'Design System', 'Usability Testing'],
-      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-               <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h6M9 12h6M9 15h4"/>
-             </svg>`,
-    },
-    {
-      title: 'Frontend Development',
-      desc: 'Membangun antarmuka responsif dan performan menggunakan teknologi modern. Kode yang bersih, terstruktur, dan dapat dikembangkan oleh tim manapun.',
-      tags: ['HTML/CSS', 'Tailwind', 'Alpine.js', 'React'],
+      title: 'Full Stack Web Development',
+      desc: 'Membangun website dinamis dan web application lengkap dari backend (Laravel/PHP/MySQL) hingga antarmuka frontend interaktif yang cepat, aman, dan mudah dioperasikan.',
+      tags: ['Laravel', 'MySQL', 'Tailwind CSS', 'Alpine.js', 'REST API'],
       icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
              </svg>`,
     },
     {
-      title: 'Design System',
-      desc: 'Membangun sistem desain yang konsisten dan terdokumentasi — komponen reusable, token desain, dan panduan gaya yang mempercepat pengembangan produk jangka panjang.',
-      tags: ['Figma Tokens', 'Component Library', 'Documentation', 'Storybook'],
+      title: 'Joki & Pengerjaan Proyek Web App',
+      desc: 'Membantu pengerjaan tugas akhir, prototipe sistem instansi, web profil UMKM, atau dashboard monitoring dengan tenggat waktu cepat dan garansi revisi sampai tuntas.',
+      tags: ['Sistem Informasi', 'Dashboard Admin', 'Monitoring', 'Pengerjaan Cepat'],
+      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+               <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line>
+             </svg>`,
+    },
+    {
+      title: 'UI/UX Design & Frontend Modern',
+      desc: 'Merancang antarmuka soft-ui / modern neumorphism yang estetis di Figma dan mengimplementasikannya langsung ke dalam kode CSS & JavaScript yang 100% responsif.',
+      tags: ['Figma', 'Soft-UI', 'Neumorphism', 'Desain Responsif'],
       icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
              </svg>`,
@@ -141,22 +141,22 @@ document.addEventListener('alpine:init', () => {
 
   const jobs = [
     {
-      role: 'Lead Product Designer',
-      place: 'Nimbus Fintech',
+      role: 'Full Stack Web Developer (Freelance & Joki Proyek)',
+      place: 'Mandiri / Klien Pemerintahan & UMKM',
       period: '2023 — Sekarang',
-      desc: 'Memimpin tim desain 4 orang, membangun sistem desain internal, dan menaikkan skor kegunaan aplikasi sebesar 34% dalam dua kuartal pertama.',
+      desc: 'Mengerjakan berbagai proyek joki dan pesanan sistem informasi terintegrasi seperti SIPARS (Dinas Kominfo Deiyai), SIMASRA (Asrama Mahasiswa Deiyai), dan sistem percetakan KUGIYAI.TOBE.ID menggunakan Laravel, Tailwind CSS, Alpine.js, dan MySQL.',
     },
     {
-      role: 'Frontend Developer & Desainer UI',
-      place: 'Studio Loka',
-      period: '2021 — 2023',
-      desc: 'Menerjemahkan desain menjadi antarmuka responsif menggunakan Tailwind CSS dan Alpine.js untuk klien e-commerce dan UMKM digital.',
+      role: 'Kontributor & Pembelajar Teknologi',
+      place: 'Komunitas SaCode Papua',
+      period: '2023',
+      desc: 'Aktif berkontribusi, belajar, dan berkolaborasi dalam ekosistem pegiat teknologi dan coding di Papua, mengasah kemampuan frontend modern serta implementasi UI/UX aplikasi.',
     },
     {
-      role: 'Junior UI Designer',
-      place: 'Kreasi Digital Nusantara',
-      period: '2019 — 2021',
-      desc: 'Mendesain landing page dan aset pemasaran untuk lebih dari 20 klien UMKM lokal, serta membantu menyusun panduan merek visual.',
+      role: 'Mahasiswa & Eksplorasi Web Development',
+      place: 'Universitas Sains dan Teknologi Jayapura (USTJ)',
+      period: '2021 — Sekarang',
+      desc: 'Memulai perjalanan pemrograman dari dasar logika komputasi, algoritma, database relational, hingga arsitektur web full stack modern.',
     },
   ];
 
