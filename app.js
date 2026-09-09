@@ -59,6 +59,86 @@ document.addEventListener('alpine:init', () => {
     },
   ];
 
+  const projects = [
+    {
+      title: 'SIMGK Deiyai — Sistem Monitoring Gereja',
+      category: 'Web App',
+      year: '2026',
+      desc: 'Aplikasi monitoring pelayanan gereja berbasis web yang mengintegrasikan dashboard real-time, manajemen gereja dan klasis, data jemaat, kegiatan & ibadah, laporan, statistik, galeri foto, ekspor data, serta sistem keamanan dan pencatatan aktivitas.',
+      tags: [
+        'Laravel',
+        'Vanilla JS',
+        'Alpine.js',
+        'Chart.js',
+        'LocalStorage',
+        'Responsive UI/UX'
+      ],
+      img: 'img/proyek-simgk-deiyai.png',
+      link: 'https://ipo-rk.github.io/SI-MOGE/'
+    },
+    {
+      title: 'KugiyaiTobe Digital Printing',
+      category: 'UI/UX',
+      year: '2026',
+      desc: 'UI/UX sistem manajemen digital printing dengan dashboard admin, pemesanan, produksi, pelacakan pengantaran, pembayaran, dan monitoring pelanggan.',
+      tags: ['Figma', 'UI/UX', 'Dashboard', 'Web App'],
+      img: 'img/kugiyaitobe-digital-printing.png',
+      link: '#',
+    },
+    {
+      title: 'SIMASRA (Sistem Informasi Monitoring & Manajemen Asrama)',
+      category: 'Web App',
+      year: '2026',
+      desc: 'Sistem Informasi Monitoring & Manajemen Asrama Mahasiswa Kabupaten Deiyai yang terintegrasi untuk pengelolaan penghuni, kamar, presensi QR Code, perizinan, pembinaan, inventaris, laporan, dan manajemen hak akses berbasis peran.',
+      tags: [
+        'Laravel',
+        'MySQL',
+        'Tailwind CSS',
+        'Alpine.js',
+        'Chart.js',
+        'SweetAlert2'
+      ],
+      img: 'img/proyek-simasra.png',
+      link: 'https://ipo-rk.github.io/ASDEY-Monitoring/landing.html'
+    },
+    {
+      title: 'Pasar Dekat',
+      category: 'Mobile',
+      year: '2022',
+      desc: 'Aplikasi belanja kebutuhan harian dari pasar tradisional terdekat dengan pelacakan real-time.',
+      tags: ['React Native', 'Firebase'],
+      img: '',
+      link: 'https://github.com',
+    },
+    {
+      title: 'ASRAMA DEIYAI',
+      category: 'UI/UX',
+      year: '2026',
+      desc: 'UI/UX Sistem Informasi Manajemen dan Monitoring Asrama Mahasiswa Kabupaten Deiyai dengan dashboard admin, data penghuni, presensi QR, monitoring kamar, pembayaran, dan tampilan responsif.',
+      tags: ['Figma', 'UI/UX', 'Dashboard', 'Responsive'],
+      img: 'img/asrama-deiyai.png',
+      link: '#',
+    },
+    {
+      title: 'KUGIYAI.TOBE.ID (Sistem Manajemen Percetakan Digital)',
+      category: 'Web App',
+      year: '2026',
+      desc: 'Sistem manajemen percetakan digital terintegrasi untuk mengelola pesanan, produksi, pembayaran, pengantaran real-time, dashboard bisnis, dan landing page promosi dalam satu platform.',
+      tags: [
+        'Laravel',
+        'Tailwind CSS',
+        'Alpine.js',
+        'Leaflet.js',
+        'OpenStreetMap',
+        'Chart.js',
+        'SweetAlert2',
+        'QRCode'
+      ],
+      img: 'img/proyek-KUGIYAITOBE.png',
+      link: 'https://ipo-rk.github.io/percetakan_baliho/'
+    },
+  ];
+
   const jobs = [
     {
       role: 'Lead Product Designer',
@@ -126,21 +206,26 @@ document.addEventListener('alpine:init', () => {
   ];
 
   // =========================================================
-  // siteShell — Layout global: navbar, scroll, cursor glow
+  // siteShell — Layout global: navbar, scroll, cursor glow, theme toggle
   // =========================================================
   Alpine.data('siteShell', () => ({
     mobileOpen: false,
     scrolled: false,
     showTop: false,
     activeSection: 'beranda',
+    theme: localStorage.getItem('theme') || 'dark',
     navItems,
     skills,
     services,
+    projects,
     jobs,
     testimonials,
     blogPosts,
 
     init() {
+      // Terapkan tema awal ke <html>
+      document.documentElement.setAttribute('data-theme', this.theme);
+
       // Scroll handler
       const onScroll = () => {
         this.scrolled = window.scrollY > 12;
@@ -172,6 +257,12 @@ document.addEventListener('alpine:init', () => {
       });
     },
 
+    toggleTheme() {
+      this.theme = this.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', this.theme);
+      localStorage.setItem('theme', this.theme);
+    },
+
     updateActiveSection() {
       const sectionIds = ['beranda', 'tentang', 'keahlian', 'layanan', 'proyek', 'pengalaman', 'testimoni', 'blog', 'kontak'];
       for (const id of sectionIds) {
@@ -193,6 +284,38 @@ document.addEventListener('alpine:init', () => {
 
     scrollTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+  }));
+
+  // =========================================================
+  // projectSection — Filter kategori & pagination kartu proyek (maks 3 awal)
+  // =========================================================
+  Alpine.data('projectSection', () => ({
+    filter: 'Semua',
+    limit: 3,
+
+    setFilter(category) {
+      this.filter = category;
+      this.limit = 3; // Reset ke 3 kartu setiap ganti kategori
+    },
+
+    get filteredProjects() {
+      if (this.filter === 'Semua') {
+        return this.projects;
+      }
+      return this.projects.filter(p => p.category === this.filter);
+    },
+
+    get visibleProjects() {
+      return this.filteredProjects.slice(0, this.limit);
+    },
+
+    get hasMore() {
+      return this.filteredProjects.length > this.limit;
+    },
+
+    showMore() {
+      this.limit += 3; // Tambah 3 kartu lagi otomatis saat diklik
     },
   }));
 
@@ -256,7 +379,13 @@ document.addEventListener('alpine:init', () => {
   // projectModal — Modal detail proyek & unduh CV
   // =========================================================
   Alpine.data('projectModal', () => ({
-    open(title, desc, stack, year, link) {
+    open(title, desc, stack, year, link, img) {
+      const imgPreview = img
+        ? `<div style="margin-bottom:14px;border-radius:14px;overflow:hidden;border:1px solid #2a3040;max-height:200px;">
+             <img src="${img}" alt="${title}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentElement.style.display='none';">
+           </div>`
+        : '';
+
       const linkButton = link
         ? `<div style="margin-top:16px;text-align:right;">
              <a href="${link}" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:8px 16px;background:linear-gradient(145deg,#dfb87a,#d1a86a);color:#1b1e27;font-weight:600;font-size:13px;border-radius:10px;text-decoration:none;">Kunjungi Tautan &rarr;</a>
@@ -266,18 +395,19 @@ document.addEventListener('alpine:init', () => {
       Swal.fire({
         title,
         html: `
-          <p style="color:#b7bdca;text-align:left;line-height:1.7;margin-bottom:12px;font-size:14px">${desc}</p>
-          <div style="background:#171a21;padding:12px 14px;border-radius:12px;margin-bottom:12px;border:1px solid #2a3040;">
-            <p style="text-align:left;font-size:13px;color:#8890a3;margin-bottom:4px">
-              <strong style="color:#d1a86a">Tahun Rilis:</strong> ${year}
+          ${imgPreview}
+          <p style="color:var(--text-muted);text-align:left;line-height:1.7;margin-bottom:12px;font-size:14px">${desc}</p>
+          <div style="background:var(--bg);padding:12px 14px;border-radius:12px;margin-bottom:12px;border:1px solid var(--shadow-light);">
+            <p style="text-align:left;font-size:13px;color:var(--text-muted);margin-bottom:4px">
+              <strong style="color:var(--accent)">Tahun Rilis:</strong> ${year}
             </p>
-            <p style="text-align:left;font-size:13px;color:#8890a3;margin:0">
-              <strong style="color:#d1a86a">Teknologi:</strong> ${stack}
+            <p style="text-align:left;font-size:13px;color:var(--text-muted);margin:0">
+              <strong style="color:var(--accent)">Teknologi:</strong> ${stack}
             </p>
           </div>
           ${linkButton}`,
-        background: '#1e222c',
-        color: '#e9e8e4',
+        background: 'var(--surface)',
+        color: 'var(--text)',
         confirmButtonText: 'Tutup',
         confirmButtonColor: '#d1a86a',
         customClass: { popup: 'swal-neu' },
@@ -289,10 +419,33 @@ document.addEventListener('alpine:init', () => {
         title: 'CV belum terpasang',
         text: 'Ganti tombol ini dengan tautan file CV Anda sendiri untuk mengaktifkan unduhan.',
         icon: 'info',
-        background: '#1e222c',
-        color: '#e9e8e4',
+        background: 'var(--surface)',
+        color: 'var(--text)',
         confirmButtonText: 'Mengerti',
         confirmButtonColor: '#d1a86a',
+        customClass: { popup: 'swal-neu' },
+      });
+    },
+  }));
+
+  // =========================================================
+  // blogModal — Modal baca artikel blog
+  // =========================================================
+  Alpine.data('blogModal', () => ({
+    open(title, category, date, content) {
+      Swal.fire({
+        title,
+        html: `
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--shadow-light);">
+            <span style="font-size:12px;font-weight:600;color:var(--accent);background:var(--accent-soft);padding:4px 10px;border-radius:999px;">${category}</span>
+            <span style="font-size:12px;color:var(--text-muted);">${date}</span>
+          </div>
+          <p style="color:var(--text-muted);text-align:left;line-height:1.8;font-size:14px;">${content}</p>`,
+        background: 'var(--surface)',
+        color: 'var(--text)',
+        confirmButtonText: 'Tutup',
+        confirmButtonColor: '#d1a86a',
+        customClass: { popup: 'swal-neu' },
       });
     },
   }));
@@ -329,10 +482,11 @@ document.addEventListener('alpine:init', () => {
           title: 'Pesan terkirim! 🎉',
           text: `Terima kasih, ${name.trim()}. Balasan akan dikirim ke ${email.trim()} dalam 1–2 hari kerja.`,
           icon: 'success',
-          background: '#1e222c',
-          color: '#e9e8e4',
+          background: 'var(--surface)',
+          color: 'var(--text)',
           confirmButtonText: 'Sip, terima kasih!',
           confirmButtonColor: '#d1a86a',
+          customClass: { popup: 'swal-neu' },
         });
         this.form = { name: '', email: '', subject: '', message: '' };
       }, 900);
@@ -343,9 +497,10 @@ document.addEventListener('alpine:init', () => {
         title,
         text,
         icon: 'warning',
-        background: '#1e222c',
-        color: '#e9e8e4',
+        background: 'var(--surface)',
+        color: 'var(--text)',
         confirmButtonColor: '#d1a86a',
+        customClass: { popup: 'swal-neu' },
       });
     },
   }));

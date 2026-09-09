@@ -69,7 +69,33 @@
         </template>
       </ul>
 
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        <!-- Tombol Toggle Light/Dark Mode -->
+        <button @click="toggleTheme()" class="neu-icon-btn theme-toggle-btn !w-10 !h-10 focus-ring"
+          :aria-label="theme === 'dark' ? 'Beralih ke mode terang' : 'Beralih ke mode gelap'"
+          :title="theme === 'dark' ? 'Mode Terang' : 'Mode Gelap'">
+          <!-- Ikon Matahari (Mode Terang) -->
+          <svg x-show="theme === 'dark'" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-accent"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <!-- Ikon Bulan (Mode Gelap) -->
+          <svg x-show="theme === 'light'" x-cloak xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-accent"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
         <button @click="scrollTo('kontak')" class="hidden sm:inline-flex btn-primary text-sm !py-2.5 !px-5">
           Hubungi saya
         </button>
@@ -303,17 +329,8 @@
   </section>
 
   <!-- ============ PROYEK ============ -->
-  <section id="proyek" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-20" aria-label="Proyek terpilih" x-data="{
-      filter: 'Semua',
-      projects: [
-        { title: 'Nimbus Finance', category: 'Web App', year: '2024', desc: 'Dasbor manajemen keuangan pribadi dengan visualisasi data real-time dan laporan otomatis.', tags: ['React','Node.js','PostgreSQL'], img: '', link: 'https://github.com' },
-        { title: 'Kopi Senja', category: 'UI/UX', year: '2023', desc: 'Desain ulang identitas digital untuk jaringan kedai kopi lokal — meningkatkan konversi 28%.', tags: ['Figma','Design System'], img: '', link: 'https://dribbble.com' },
-        { title: 'Ruang Belajar', category: 'Web App', year: '2023', desc: 'Platform kelas daring dengan sistem progres, kuis interaktif, dan sertifikat otomatis.', tags: ['Laravel','Tailwind','MySQL'], img: '', link: 'https://github.com' },
-        { title: 'Pasar Dekat', category: 'Mobile', year: '2022', desc: 'Aplikasi belanja kebutuhan harian dari pasar tradisional terdekat dengan pelacakan real-time.', tags: ['React Native','Firebase'], img: '', link: 'https://github.com' },
-        { title: 'Studio Karya', category: 'UI/UX', year: '2022', desc: 'Portofolio interaktif untuk agensi kreatif dengan micro-interaction dan animasi halus.', tags: ['Figma','Prototyping'], img: '', link: 'https://dribbble.com' },
-        { title: 'Logix Warehouse', category: 'Web App', year: '2021', desc: 'Sistem manajemen inventaris gudang skala menengah dengan laporan dan barcode scanner.', tags: ['Node.js','Express','MongoDB'], img: '', link: 'https://github.com' },
-      ]
-    }">
+  <section id="proyek" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-20" aria-label="Proyek terpilih"
+    x-data="projectSection">
     <div class="text-center max-w-xl mx-auto mb-10 reveal" x-intersect.once="$el.classList.add('in-view')">
       <p class="text-accent font-semibold text-sm mb-3">Karya Terpilih</p>
       <h2 class="font-display text-3xl sm:text-4xl font-semibold">Proyek yang pernah saya kerjakan</h2>
@@ -325,16 +342,15 @@
       <div class="neu-inset-sm inline-flex flex-wrap justify-center gap-1 p-1.5" role="tablist"
         aria-label="Filter kategori proyek">
         <template x-for="cat in ['Semua','Web App','UI/UX','Mobile']" :key="cat">
-          <button @click="filter = cat" class="neu-tab px-4 sm:px-5 py-2 text-sm focus-ring"
+          <button @click="setFilter(cat)" class="neu-tab px-4 sm:px-5 py-2 text-sm focus-ring"
             :class="{ 'active': filter === cat }" x-text="cat" role="tab" :aria-selected="filter === cat"></button>
         </template>
       </div>
     </div>
 
-    <!-- Grid proyek -->
+    <!-- Grid proyek (Maksimal 3 kartu awal per kategori) -->
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <template x-for="(project, pi) in projects.filter(p => filter === 'Semua' || p.category === filter)"
-        :key="project.title">
+      <template x-for="(project, pi) in visibleProjects" :key="project.title">
         <div class="reveal" x-intersect.once="$el.classList.add('in-view')"
           :style="`transition-delay:${(pi % 3) * 100}ms`">
           <div class="tilt neu-card p-6 flex flex-col h-full group" x-data="{ rx: 0, ry: 0 }"
@@ -346,22 +362,22 @@
               class="neu-inset h-36 sm:h-40 rounded-2xl mb-5 flex items-center justify-center relative overflow-hidden group-hover:shadow-inner transition-all duration-300">
               <!-- Jika proyek memiliki gambar nyata (project.img) tampilkan img, bila tidak tampilkan visual monogram/mockup berkelas -->
               <template x-if="project.img">
-                <img :src="project.img" :alt="project.title"
+                <img :src="project.img" :alt="project.title" loading="lazy"
+                  @error="$el.style.display='none'; $el.nextElementSibling.style.display='flex';"
                   class="w-full h-full object-cover object-center rounded-2xl transition-transform duration-500 group-hover:scale-105">
               </template>
-              <template x-if="!project.img">
-                <div class="w-full h-full flex flex-col items-center justify-center p-4 relative">
-                  <div
-                    class="absolute inset-0 bg-gradient-to-br from-[var(--surface)] via-transparent to-[var(--accent-soft)] opacity-40">
-                  </div>
-                  <div class="neu-icon-btn !w-12 !h-12 mb-2 relative z-10">
-                    <span class="font-display text-base font-bold text-accent"
-                      x-text="project.title.split(' ').map(w => w[0]).join('')"></span>
-                  </div>
-                  <span class="text-[11px] text-muted relative z-10 font-mono tracking-wider"
-                    x-text="project.category"></span>
+              <div class="w-full h-full flex flex-col items-center justify-center p-4 relative"
+                :style="project.img ? 'display: none;' : ''">
+                <div
+                  class="absolute inset-0 bg-gradient-to-br from-[var(--surface)] via-transparent to-[var(--accent-soft)] opacity-40">
                 </div>
-              </template>
+                <div class="neu-icon-btn !w-12 !h-12 mb-2 relative z-10">
+                  <span class="font-display text-base font-bold text-accent"
+                    x-text="project.title.split(' ').map(w => w[0]).join('')"></span>
+                </div>
+                <span class="text-[11px] text-muted relative z-10 font-mono tracking-wider"
+                  x-text="project.category"></span>
+              </div>
 
               <!-- Badge Tahun Proyek -->
               <span
@@ -390,11 +406,13 @@
 
             <!-- Card Actions -->
             <div class="flex items-center gap-2 pt-2 border-t border-[var(--shadow-light)]" x-data="projectModal">
-              <button @click="open(project.title, project.desc, project.tags.join(', '), project.year, project.link)"
+              <button
+                @click="open(project.title, project.desc, project.tags.join(', '), project.year, project.link, project.img)"
                 class="btn-primary text-xs !py-2.5 !px-4 flex-1 justify-center focus-ring">
                 Detail Proyek
               </button>
-              <button @click="open(project.title, project.desc, project.tags.join(', '), project.year, project.link)"
+              <button
+                @click="open(project.title, project.desc, project.tags.join(', '), project.year, project.link, project.img)"
                 class="neu-icon-btn !w-10 !h-10 shrink-0" aria-label="Lihat pratinjau">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
@@ -406,6 +424,19 @@
           </div>
         </div>
       </template>
+    </div>
+
+    <!-- Tombol 'Lihat Proyek Lainnya' (Otomatis muncul jika jumlah proyek > 3) -->
+    <div class="flex justify-center mt-12" x-show="hasMore" x-cloak x-transition>
+      <button @click="showMore()"
+        class="btn-ghost text-sm inline-flex items-center gap-2.5 px-6 py-3 neu-pressable focus-ring">
+        <span>Lihat Proyek Lainnya</span>
+        <svg xmlns="http://www.w3.org/2000/svg"
+          class="w-4 h-4 text-accent transition-transform duration-300 group-hover:translate-y-0.5" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
     </div>
   </section>
 
@@ -489,15 +520,16 @@
           Pikiran dari balik layar
         </h2>
       </div>
-      <a href="#blog" class="btn-ghost text-sm self-start sm:self-auto whitespace-nowrap !py-2.5 !px-5">
+      <button @click="scrollTo('blog')"
+        class="btn-ghost text-sm self-start sm:self-auto whitespace-nowrap !py-2.5 !px-5 focus-ring">
         Semua artikel →
-      </a>
+      </button>
     </div>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <template x-for="(post, i) in blogPosts" :key="post.title">
         <div class="reveal" x-intersect.once="$el.classList.add('in-view')" :style="`transition-delay:${i * 120}ms`">
-          <article class="blog-card neu-flat p-6 sm:p-7 h-full flex flex-col gap-4">
+          <article class="blog-card neu-flat p-6 sm:p-7 h-full flex flex-col gap-4" x-data="blogModal">
             <!-- Label kategori + tanggal -->
             <div class="flex items-center justify-between">
               <span class="text-xs font-semibold text-accent bg-[var(--accent-soft)] px-3 py-1 rounded-full"
@@ -514,10 +546,10 @@
             </div>
             <h3 class="font-display font-semibold text-base sm:text-lg leading-snug" x-text="post.title"></h3>
             <p class="text-muted text-sm leading-relaxed flex-1" x-text="post.excerpt"></p>
-            <a href="#blog"
-              class="text-accent text-xs font-semibold hover:underline underline-offset-4 focus-ring w-fit">
+            <button @click="open(post.title, post.category, post.date, post.excerpt)"
+              class="text-accent text-xs font-semibold hover:underline underline-offset-4 focus-ring w-fit text-left">
               Baca selengkapnya →
-            </a>
+            </button>
           </article>
         </div>
       </template>

@@ -5,11 +5,13 @@
    ========================================================= */
 
 /* =========================================================
-   1. DESIGN TOKENS
+   1. DESIGN TOKENS (Dark & Light Mode Dynamic)
    ========================================================= */
 :root {
+  /* Default Dark Mode (Premium Obsidian & Warm Gold) */
   --bg: #1b1e27;
   --surface: #1e222c;
+  --surface-hover: #222733;
   --shadow-dark: #101218;
   --shadow-light: #2a3040;
   --text: #e9e8e4;
@@ -24,6 +26,20 @@
   --blur: 18px;
 }
 
+/* Light Mode (Soft Warm Sand Neumorphism) */
+[data-theme="light"] {
+  --bg: #eef1f6;
+  --surface: #eef1f6;
+  --surface-hover: #f5f7fb;
+  --shadow-dark: #c5cbd6;
+  --shadow-light: #ffffff;
+  --text: #1d232f;
+  --text-muted: #64748b;
+  --accent: #b8860b;
+  --accent-dim: #8b6508;
+  --accent-soft: rgba(184, 134, 11, 0.12);
+}
+
 /* =========================================================
    2. BASE RESET & GLOBAL
    ========================================================= */
@@ -31,6 +47,10 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 * {
@@ -112,7 +132,7 @@ svg {
 }
 
 .neu-convex {
-  background: linear-gradient(145deg, #21242f, #191c24);
+  background: linear-gradient(145deg, var(--surface-hover), var(--surface));
   border-radius: 50%;
   box-shadow:
     var(--dist) var(--dist) var(--blur) var(--shadow-dark),
@@ -134,6 +154,15 @@ svg {
   box-shadow:
     inset 4px 4px 8px var(--shadow-dark),
     inset -4px -4px 8px var(--shadow-light);
+}
+
+/* Lingkaran dekoratif dalam portrait hero (dinamis dark/light) */
+.portrait-inner {
+  background: linear-gradient(145deg, var(--surface-hover), var(--surface));
+  box-shadow:
+    4px 4px 10px var(--shadow-dark),
+    -4px -4px 10px var(--shadow-light);
+  border: 1px solid rgba(209, 168, 106, 0.18);
 }
 
 /* =========================================================
@@ -629,15 +658,77 @@ svg {
    ========================================================= */
 .blog-card {
   transition:
-    box-shadow 0.35s ease,
-    transform 0.3s ease;
+    box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .blog-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-5px);
   box-shadow:
-    13px 13px 26px var(--shadow-dark),
-    -11px -11px 24px var(--shadow-light);
+    14px 14px 28px var(--shadow-dark),
+    -12px -12px 26px var(--shadow-light);
+}
+
+/* --- Animasi Shimmer Efek Mewah untuk Kartu Utama --- */
+@keyframes shimmerGleam {
+  0% {
+    transform: translateX(-100%) rotate(35deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translateX(200%) rotate(35deg);
+    opacity: 0;
+  }
+}
+
+.neu-card:hover .neu-inset::before,
+.service-card:hover::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
+  animation: shimmerGleam 1.8s ease-in-out;
+  pointer-events: none;
+}
+
+/* --- Transisi Halus untuk Tombol Mode Gelap/Terang --- */
+.theme-toggle-btn {
+  position: relative;
+  overflow: hidden;
+}
+.theme-toggle-btn svg {
+  transition:
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.3s ease;
+}
+.theme-toggle-btn:hover svg {
+  transform: rotate(20deg) scale(1.1);
+}
+
+/* --- SweetAlert2 Neumorphic Popup Dinamis (Dark & Light) --- */
+.swal2-popup.swal-neu {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow:
+    14px 14px 28px var(--shadow-dark),
+    -12px -12px 26px var(--shadow-light) !important;
+  border: 1px solid rgba(209, 168, 106, 0.2) !important;
+}
+.swal2-popup.swal-neu .swal2-title {
+  color: var(--text) !important;
+  font-family: "Space Grotesk", sans-serif !important;
 }
 
 /* =========================================================

@@ -121,12 +121,13 @@ Semua data portofolio tersentralisasi dan mudah dimodifikasi:
   - Ubah array `navItems` untuk mengatur navigasi.
   - Ubah array `skills` untuk memperbarui tingkat penguasaan alat/bahasa.
   - Ubah array `services` untuk mengganti penawaran jasa.
+  - Ubah array `projects` untuk menambah atau mengganti portofolio karya (termasuk properti `img`).
   - Ubah array `jobs` untuk memperbarui riwayat pekerjaan.
   - Ubah array `testimonials` untuk testimoni klien Anda.
   - Ubah array `blogPosts` untuk menambahkan artikel baru.
 
 - **Menambahkan Gambar Nyata pada Kartu Proyek**:
-  Buka `index.html`, cari blok data `projects`:
+  Buka `app.js`, cari array `projects`:
   ```javascript
   {
     title: 'Nimbus Finance',
@@ -134,7 +135,7 @@ Semua data portofolio tersentralisasi dan mudah dimodifikasi:
     year: '2024',
     desc: 'Deskripsi proyek...',
     tags: ['React', 'Node.js'],
-    img: 'path/ke/gambar-proyek.jpg', // Masukkan path/URL gambar di sini
+    img: 'img/proyek-1.png', // Masukkan path foto (misal: img/proyek-1.png atau URL web)
     link: 'https://demo-anda.com'
   }
   ```
