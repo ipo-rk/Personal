@@ -1,8 +1,12 @@
 /* =========================================================
    PORTOFOLIO — NEUMORPHISM PREMIUM
-   Tokens, utilitas neumorphic, dan animasi kustom.
+   Tokens, utilitas neumorphic, animasi kustom, dan section baru.
+   Versi Final — konsisten, responsif 100%, aksesibel.
    ========================================================= */
 
+/* =========================================================
+   1. DESIGN TOKENS
+   ========================================================= */
 :root {
   --bg: #1b1e27;
   --surface: #1e222c;
@@ -20,29 +24,80 @@
   --blur: 18px;
 }
 
-* { scrollbar-color: var(--accent-dim) var(--surface); }
-html { scroll-behavior: smooth; }
-[x-cloak] { display: none !important; }
+/* =========================================================
+   2. BASE RESET & GLOBAL
+   ========================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  scrollbar-color: var(--accent-dim) var(--surface);
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Mencegah horizontal overflow di semua breakpoint */
+  overflow-x: hidden;
+}
 
 body {
   background: var(--bg);
   color: var(--text);
   font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+  min-width: 320px;
 }
 
-.font-display { font-family: "Space Grotesk", sans-serif; }
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
 
-::selection { background: var(--accent-soft); color: var(--accent); }
+[x-cloak] {
+  display: none !important;
+}
 
-/* ---------- Neumorphic surfaces ---------- */
+::selection {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
 
+/* =========================================================
+   3. TIPOGRAFI
+   ========================================================= */
+.font-display {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.max-prose {
+  max-width: 62ch;
+}
+
+/* =========================================================
+   4. NEUMORPHIC SURFACES
+   ========================================================= */
 .neu-flat {
   background: var(--surface);
   border-radius: var(--radius-lg);
   box-shadow:
     var(--dist) var(--dist) var(--blur) var(--shadow-dark),
-    calc(var(--dist) * -1) calc(var(--dist) * -1) var(--blur) var(--shadow-light);
-  transition: box-shadow .35s ease, transform .35s ease;
+    calc(var(--dist) * -1) calc(var(--dist) * -1) var(--blur)
+      var(--shadow-light);
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
 }
 
 .neu-flat-sm {
@@ -51,7 +106,9 @@ body {
   box-shadow:
     6px 6px 12px var(--shadow-dark),
     -6px -6px 12px var(--shadow-light);
-  transition: box-shadow .3s ease, transform .3s ease;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
 .neu-convex {
@@ -59,7 +116,8 @@ body {
   border-radius: 50%;
   box-shadow:
     var(--dist) var(--dist) var(--blur) var(--shadow-dark),
-    calc(var(--dist) * -1) calc(var(--dist) * -1) var(--blur) var(--shadow-light);
+    calc(var(--dist) * -1) calc(var(--dist) * -1) var(--blur)
+      var(--shadow-light);
 }
 
 .neu-inset {
@@ -70,11 +128,28 @@ body {
     inset -5px -5px 10px var(--shadow-light);
 }
 
+.neu-inset-sm {
+  background: var(--surface);
+  border-radius: 999px;
+  box-shadow:
+    inset 4px 4px 8px var(--shadow-dark),
+    inset -4px -4px 8px var(--shadow-light);
+}
+
+/* =========================================================
+   5. INTERACTIVE STATES
+   ========================================================= */
 .neu-pressable {
   cursor: pointer;
-  transition: box-shadow .18s ease, transform .18s ease;
+  transition:
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
 }
-.neu-pressable:hover { transform: translateY(-2px); }
+
+.neu-pressable:hover {
+  transform: translateY(-2px);
+}
+
 .neu-pressable:active {
   transform: translateY(0);
   box-shadow:
@@ -82,101 +157,214 @@ body {
     inset -4px -4px 8px var(--shadow-light);
 }
 
+/* =========================================================
+   6. ICON BUTTON
+   ========================================================= */
 .neu-icon-btn {
-  width: 46px; height: 46px;
-  display: flex; align-items: center; justify-content: center;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   background: var(--surface);
   color: var(--text-muted);
   box-shadow:
     5px 5px 10px var(--shadow-dark),
     -5px -5px 10px var(--shadow-light);
-  transition: box-shadow .2s ease, color .2s ease, transform .2s ease;
+  transition:
+    box-shadow 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+  flex-shrink: 0;
 }
-.neu-icon-btn:hover { color: var(--accent); transform: translateY(-2px); }
+
+.neu-icon-btn:hover {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
 .neu-icon-btn:active {
-  box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-  transform: translateY(0);
-}
-
-/* ---------- Text helpers ---------- */
-
-.text-accent { color: var(--accent); }
-.text-muted { color: var(--text-muted); }
-.max-prose { max-width: 62ch; }
-
-/* ---------- Buttons ---------- */
-
-.btn-primary {
-  background: linear-gradient(145deg, #dfb87a, var(--accent));
-  color: #1b1e27;
-  font-weight: 600;
-  border-radius: var(--radius-md);
-  padding: 0.95rem 2rem;
-  box-shadow: 6px 6px 14px var(--shadow-dark), -4px -4px 10px rgba(255,255,255,0.02);
-  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
-}
-.btn-primary:hover { transform: translateY(-2px); filter: brightness(1.05); }
-.btn-primary:active { transform: translateY(0) scale(.98); }
-
-.btn-ghost {
-  border-radius: var(--radius-md);
-  padding: 0.9rem 1.9rem;
-  color: var(--text);
-  background: var(--surface);
-  box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
-  transition: box-shadow .2s ease, transform .2s ease, color .2s ease;
-}
-.btn-ghost:hover { color: var(--accent); transform: translateY(-2px); }
-.btn-ghost:active {
-  box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+  box-shadow:
+    inset 3px 3px 6px var(--shadow-dark),
+    inset -3px -3px 6px var(--shadow-light);
   transform: translateY(0);
 }
 
 /* =========================================================
-   ANIMASI
+   7. BUTTONS
    ========================================================= */
-
-/* --- Satu sequence orkestrasi saat hero dimuat --- */
-@keyframes riseIn {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #dfb87a, var(--accent));
+  color: #1b1e27;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1.875rem;
+  box-shadow:
+    6px 6px 14px var(--shadow-dark),
+    -4px -4px 10px rgba(255, 255, 255, 0.02);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+  white-space: nowrap;
 }
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1.875rem;
+  color: var(--text);
+  background: var(--surface);
+  box-shadow:
+    6px 6px 12px var(--shadow-dark),
+    -6px -6px 12px var(--shadow-light);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-ghost:hover {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.btn-ghost:active {
+  box-shadow:
+    inset 4px 4px 8px var(--shadow-dark),
+    inset -4px -4px 8px var(--shadow-light);
+  transform: translateY(0);
+}
+
+/* =========================================================
+   8. FOCUS RING (AKSESIBILITAS)
+   ========================================================= */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* =========================================================
+   9. ANIMASI — HERO SEQUENCE
+   ========================================================= */
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .hero-seq > * {
   opacity: 0;
-  animation: riseIn .85s cubic-bezier(.19,1,.22,1) forwards;
+  animation: riseIn 0.85s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
-.hero-seq > *:nth-child(1) { animation-delay: .05s; }
-.hero-seq > *:nth-child(2) { animation-delay: .18s; }
-.hero-seq > *:nth-child(3) { animation-delay: .32s; }
-.hero-seq > *:nth-child(4) { animation-delay: .46s; }
-.hero-seq > *:nth-child(5) { animation-delay: .6s; }
+
+.hero-seq > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.hero-seq > *:nth-child(2) {
+  animation-delay: 0.18s;
+}
+.hero-seq > *:nth-child(3) {
+  animation-delay: 0.32s;
+}
+.hero-seq > *:nth-child(4) {
+  animation-delay: 0.46s;
+}
+.hero-seq > *:nth-child(5) {
+  animation-delay: 0.6s;
+}
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(.86) rotate(-4deg); }
-  to   { opacity: 1; transform: scale(1) rotate(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.86) rotate(-4deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
 }
-.hero-portrait { animation: scaleIn 1s cubic-bezier(.19,1,.22,1) .35s forwards; opacity: 0; }
 
-/* --- Ambient float untuk elemen dekoratif hero --- */
-@keyframes floatY {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-14px) rotate(2deg); }
+.hero-portrait {
+  animation: scaleIn 1s cubic-bezier(0.19, 1, 0.22, 1) 0.35s forwards;
+  opacity: 0;
 }
-.float-slow { animation: floatY 7s ease-in-out infinite; }
-.float-slower { animation: floatY 9.5s ease-in-out infinite; animation-delay: -3s; }
+
+/* =========================================================
+   10. ANIMASI — DEKORATIF
+   ========================================================= */
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(2deg);
+  }
+}
+
+.float-slow {
+  animation: floatY 7s ease-in-out infinite;
+}
+
+.float-slower {
+  animation: floatY 9.5s ease-in-out infinite;
+  animation-delay: -3s;
+}
 
 @keyframes spinSlow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
-.spin-slow { animation: spinSlow 26s linear infinite; }
 
-/* --- Glow pulsating di belakang aksen --- */
-@keyframes pulseGlow {
-  0%, 100% { opacity: .35; transform: scale(1); }
-  50% { opacity: .6; transform: scale(1.08); }
+.spin-slow {
+  animation: spinSlow 26s linear infinite;
 }
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.08);
+  }
+}
+
 .accent-glow {
   position: absolute;
   border-radius: 999px;
@@ -186,109 +374,368 @@ body {
   pointer-events: none;
 }
 
-/* --- Reveal saat elemen memasuki viewport (dipicu oleh scroll = aksi pengguna) --- */
+/* =========================================================
+   11. ANIMASI — SCROLL REVEAL (SATU SISTEM)
+   Semua reveal dipicu dengan kelas "in-view" (via x-intersect
+   atau Alpine data 'reveal' yang menambahkan is-visible).
+   ========================================================= */
 .reveal {
   opacity: 0;
   transform: translateY(26px);
-  transition: opacity .8s cubic-bezier(.19,1,.22,1), transform .8s cubic-bezier(.19,1,.22,1);
+  transition:
+    opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1),
+    transform 0.8s cubic-bezier(0.19, 1, 0.22, 1);
 }
-.reveal.is-visible { opacity: 1; transform: translateY(0); }
 
-/* --- Progress ring skill --- */
+/* Dipicu oleh x-intersect */
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Dipicu oleh Alpine 'reveal' data component via JS */
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =========================================================
+   12. SKILL PROGRESS RING
+   ========================================================= */
 .ring-progress {
   transform: rotate(-90deg);
   transform-origin: 50% 50%;
 }
+
 .ring-progress circle.bar {
   stroke-dasharray: 251.2;
   stroke-dashoffset: 251.2;
-  transition: stroke-dashoffset 1.4s cubic-bezier(.19,1,.22,1);
+  transition: stroke-dashoffset 1.4s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-/* --- Garis timeline tergambar --- */
+/* =========================================================
+   13. TIMELINE (PENGALAMAN)
+   ========================================================= */
 @keyframes drawLine {
-  from { transform: scaleY(0); }
-  to { transform: scaleY(1); }
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
 }
+
 .timeline-line {
   transform-origin: top;
-  animation: drawLine 1.6s cubic-bezier(.19,1,.22,1) forwards;
+  animation: drawLine 1.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
 }
 
-/* --- Kartu proyek: highlight bergerak halus di border saat hover --- */
-.project-card { position: relative; overflow: hidden; }
-.project-card::after {
+/* =========================================================
+   14. PROJECT CARDS — TILT & BORDER GLOW
+   ========================================================= */
+.neu-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    var(--dist) var(--dist) var(--blur) var(--shadow-dark),
+    calc(var(--dist) * -1) calc(var(--dist) * -1) var(--blur)
+      var(--shadow-light);
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+  will-change: transform;
+}
+
+.neu-card:hover {
+  box-shadow:
+    13px 13px 24px var(--shadow-dark),
+    -11px -11px 22px var(--shadow-light);
+}
+
+/* Border gradient glow on hover */
+.neu-card::after {
   content: "";
-  position: absolute; inset: 0;
+  position: absolute;
+  inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(120deg, transparent 30%, var(--accent) 50%, transparent 70%);
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    var(--accent) 50%,
+    transparent 70%
+  );
   background-size: 220% 220%;
   background-position: 120% 0%;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   opacity: 0;
-  transition: opacity .4s ease, background-position 1.1s ease;
+  transition:
+    opacity 0.4s ease,
+    background-position 1.1s ease;
   pointer-events: none;
 }
-.project-card:hover::after { opacity: .8; background-position: -20% 0%; }
-.project-card:hover { transform: translateY(-4px); }
 
-/* --- Nav pill indikator status ketersediaan --- */
+.neu-card:hover::after {
+  opacity: 0.8;
+  background-position: -20% 0%;
+}
+
+.tilt {
+  transition: transform 0.15s ease-out;
+}
+
+/* =========================================================
+   15. FILTER TAB (PROYEK)
+   ========================================================= */
+.neu-tab {
+  border-radius: 999px;
+  color: var(--text-muted);
+  background: transparent;
+  font-weight: 500;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.neu-tab:hover:not(.active) {
+  color: var(--text);
+}
+
+.neu-tab.active {
+  color: #1b1e27;
+  background: linear-gradient(145deg, #dfb87a, var(--accent));
+  box-shadow:
+    3px 3px 8px var(--shadow-dark),
+    -2px -2px 6px rgba(255, 255, 255, 0.03);
+}
+
+/* =========================================================
+   16. GROW LINE (DEKORASI SECTION HEADER)
+   ========================================================= */
+.grow-line {
+  display: block;
+  height: 3px;
+  width: 0;
+  border-radius: 999px;
+  transition: width 1s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.grow-line.in-view {
+  width: 64px;
+}
+
+.accent-gradient {
+  background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+}
+
+/* =========================================================
+   17. STATUS DOT (HERO AVAILABILITY)
+   ========================================================= */
 .status-dot {
-  width: 8px; height: 8px; border-radius: 50%;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
   background: #6ee7b7;
-  box-shadow: 0 0 0 0 rgba(110,231,183,.6);
+  box-shadow: 0 0 0 0 rgba(110, 231, 183, 0.6);
   animation: statusPing 2.2s ease-out infinite;
-}
-@keyframes statusPing {
-  0%   { box-shadow: 0 0 0 0 rgba(110,231,183,.5); }
-  70%  { box-shadow: 0 0 0 8px rgba(110,231,183,0); }
-  100% { box-shadow: 0 0 0 0 rgba(110,231,183,0); }
+  flex-shrink: 0;
 }
 
-/* --- Cursor glow ambient di hero (mengikuti mouse, halus) --- */
+@keyframes statusPing {
+  0% {
+    box-shadow: 0 0 0 0 rgba(110, 231, 183, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(110, 231, 183, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(110, 231, 183, 0);
+  }
+}
+
+/* =========================================================
+   18. CURSOR GLOW (DESKTOP)
+   ========================================================= */
 #cursor-glow {
   position: fixed;
-  width: 420px; height: 420px;
+  width: 420px;
+  height: 420px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(209,168,106,0.08), transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(209, 168, 106, 0.08),
+    transparent 70%
+  );
   pointer-events: none;
   transform: translate(-50%, -50%);
   z-index: 0;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
 }
 
-/* --- Scrollbar tipis --- */
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--shadow-light); border-radius: 10px; }
+/* =========================================================
+   19. SERVICE CARDS (SECTION LAYANAN — BARU)
+   ========================================================= */
+.service-card {
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.3s ease;
+}
 
-/* --- Reduced motion --- */
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    13px 13px 26px var(--shadow-dark),
+    -11px -11px 24px var(--shadow-light);
+}
+
+/* =========================================================
+   20. TESTIMONIAL CARDS (SECTION TESTIMONI — BARU)
+   ========================================================= */
+.testimonial-card {
+  position: relative;
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.3s ease;
+}
+
+.testimonial-card::before {
+  content: "\201C"; /* Tanda kutip kiri besar */
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.12;
+  pointer-events: none;
+  user-select: none;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-3px);
+}
+
+/* =========================================================
+   21. BLOG CARDS (SECTION BLOG — BARU)
+   ========================================================= */
+.blog-card {
+  transition:
+    box-shadow 0.35s ease,
+    transform 0.3s ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    13px 13px 26px var(--shadow-dark),
+    -11px -11px 24px var(--shadow-light);
+}
+
+/* =========================================================
+   22. SELECT DROPDOWN
+   ========================================================= */
+select option {
+  background: var(--surface);
+  color: var(--text);
+}
+
+/* =========================================================
+   23. SCROLLBAR
+   ========================================================= */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--shadow-light);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-dim);
+}
+
+/* =========================================================
+   24. RESPONSIVE — FINE-TUNING
+   ========================================================= */
+
+/* Extra-small (<360px): pastikan tidak ada overflow */
+@media (max-width: 360px) {
+  .btn-primary,
+  .btn-ghost {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  /* Badge ukuran diperkecil agar pas di layar sangat kecil tanpa menutupi profil */
+  .float-slow,
+  .float-slower {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.7rem;
+  }
+
+  .float-slow p:first-child,
+  .float-slower p:first-child {
+    font-size: 0.95rem;
+  }
+}
+
+/* Mobile (<640px): kursor glow disembunyikan & optimasi float badge */
+@media (max-width: 640px) {
+  #cursor-glow {
+    display: none;
+  }
+
+  /* Timeline: kurangi padding kiri agar konten tidak terpotong */
+  .timeline-left-fix {
+    padding-left: 2rem;
+  }
+
+  /* Jaga float badge di mobile agar tetap di luar batas portrait visual */
+  .float-slow {
+    transform-origin: top left;
+  }
+  .float-slower {
+    transform-origin: bottom right;
+  }
+}
+
+/* =========================================================
+   25. REDUCED MOTION — AKSESIBILITAS
+   ========================================================= */
 @media (prefers-reduced-motion: reduce) {
-  .hero-seq > *, .hero-portrait, .float-slow, .float-slower, .spin-slow,
-  .accent-glow, .reveal, .timeline-line, #cursor-glow, .status-dot {
+  .hero-seq > *,
+  .hero-portrait,
+  .float-slow,
+  .float-slower,
+  .spin-slow,
+  .accent-glow,
+  .reveal,
+  .timeline-line,
+  #cursor-glow,
+  .status-dot,
+  .tilt,
+  .neu-card,
+  .grow-line,
+  .service-card,
+  .testimonial-card,
+  .blog-card {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;
     transform: none !important;
   }
 }
-
-@media (max-width: 768px) {
-  #cursor-glow { display: none; }
-}
-
-/* --- Penyesuaian layar sangat sempit (≤380px), agar bayangan neumorphic
-       tidak terasa terlalu berat / mepet ke tepi layar --- */
-@media (max-width: 380px) {
-  :root {
-    --dist: 6px;
-    --blur: 12px;
-  }
-}
-
-/* --- Jaga agar tidak ada elemen yang memicu scroll horizontal di perangkat kecil --- */
-html, body { max-width: 100%; overflow-x: hidden; }
-img, svg { max-width: 100%; height: auto; }

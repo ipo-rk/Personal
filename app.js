@@ -1,46 +1,180 @@
 // =========================================================
-// PORTOFOLIO — komponen Alpine.js & integrasi SweetAlert2
+// PORTOFOLIO — Alpine.js komponen & integrasi SweetAlert2
+// Versi Final — throttle, validasi email, modal fix, data terpusat.
 // =========================================================
 
 document.addEventListener('alpine:init', () => {
 
-  // ---- Layout global: nav mobile, back-to-top, scrollspy ----
+  // =========================================================
+  // DATA TERPUSAT — Navbar, Skills, Services, Jobs,
+  //                 Testimonials, Blog Posts
+  // =========================================================
+
+  const navItems = [
+    { id: 'beranda', label: 'Beranda' },
+    { id: 'tentang', label: 'Tentang' },
+    { id: 'keahlian', label: 'Keahlian' },
+    { id: 'layanan', label: 'Layanan' },
+    { id: 'proyek', label: 'Proyek' },
+    { id: 'pengalaman', label: 'Pengalaman' },
+    { id: 'testimoni', label: 'Testimoni' },
+    { id: 'blog', label: 'Blog' },
+  ];
+
+  const skills = [
+    { name: 'HTML5 & CSS3', level: 95 },
+    { name: 'Tailwind CSS', level: 92 },
+    { name: 'JavaScript & Alpine.js', level: 88 },
+    { name: 'Figma & Desain Sistem', level: 94 },
+    { name: 'UI/UX Research', level: 85 },
+    { name: 'React', level: 78 },
+    { name: 'Desain Responsif', level: 96 },
+    { name: 'Git & Kolaborasi Tim', level: 90 },
+  ];
+
+  const services = [
+    {
+      title: 'UI/UX Design',
+      desc: 'Merancang pengalaman pengguna yang intuitif dan antarmuka yang estetis — dari wireframe, user flow, hingga prototype interaktif yang siap diserahkan ke developer.',
+      tags: ['Figma', 'Prototyping', 'Design System', 'Usability Testing'],
+      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+               <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h6M9 12h6M9 15h4"/>
+             </svg>`,
+    },
+    {
+      title: 'Frontend Development',
+      desc: 'Membangun antarmuka responsif dan performan menggunakan teknologi modern. Kode yang bersih, terstruktur, dan dapat dikembangkan oleh tim manapun.',
+      tags: ['HTML/CSS', 'Tailwind', 'Alpine.js', 'React'],
+      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+               <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+             </svg>`,
+    },
+    {
+      title: 'Design System',
+      desc: 'Membangun sistem desain yang konsisten dan terdokumentasi — komponen reusable, token desain, dan panduan gaya yang mempercepat pengembangan produk jangka panjang.',
+      tags: ['Figma Tokens', 'Component Library', 'Documentation', 'Storybook'],
+      icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+             </svg>`,
+    },
+  ];
+
+  const jobs = [
+    {
+      role: 'Lead Product Designer',
+      place: 'Nimbus Fintech',
+      period: '2023 — Sekarang',
+      desc: 'Memimpin tim desain 4 orang, membangun sistem desain internal, dan menaikkan skor kegunaan aplikasi sebesar 34% dalam dua kuartal pertama.',
+    },
+    {
+      role: 'Frontend Developer & Desainer UI',
+      place: 'Studio Loka',
+      period: '2021 — 2023',
+      desc: 'Menerjemahkan desain menjadi antarmuka responsif menggunakan Tailwind CSS dan Alpine.js untuk klien e-commerce dan UMKM digital.',
+    },
+    {
+      role: 'Junior UI Designer',
+      place: 'Kreasi Digital Nusantara',
+      period: '2019 — 2021',
+      desc: 'Mendesain landing page dan aset pemasaran untuk lebih dari 20 klien UMKM lokal, serta membantu menyusun panduan merek visual.',
+    },
+  ];
+
+  const testimonials = [
+    {
+      name: 'Andi Prasetyo',
+      role: 'CEO, Nimbus Fintech',
+      stars: 5,
+      quote: 'Rick11 tidak hanya mendesain — ia memahami produk kami secara mendalam. Sistem desain yang ia bangun mempercepat siklus rilis kami hampir dua kali lipat.',
+    },
+    {
+      name: 'Riana Kusumawati',
+      role: 'Product Manager, Studio Loka',
+      stars: 5,
+      quote: 'Kolaborasinya sangat lancar. Ia bisa berbicara dalam bahasa bisnis, bahasa desain, dan bahasa kode secara bersamaan. Jarang menemukan talenta seperti ini.',
+    },
+    {
+      name: 'Budi Santoso',
+      role: 'Founder, Pasar Dekat',
+      stars: 5,
+      quote: 'Aplikasi kami yang sebelumnya mendapat banyak keluhan usabilitas kini punya ulasan bintang 4.8 di Play Store. Terima kasih atas kerja kerasnya!',
+    },
+  ];
+
+  const blogPosts = [
+    {
+      title: 'Mengapa Neumorphism Masih Relevan di 2026',
+      excerpt: 'Banyak yang mengira neumorphism sudah mati. Tapi dengan pendekatan yang tepat pada kontras dan aksesibilitas, gaya ini justru memberikan kedalaman visual yang tidak bisa ditiru flat design.',
+      category: 'Desain',
+      date: 'Agust 2026',
+      isoDate: '2026-08-15',
+    },
+    {
+      title: '5 Kebiasaan Code Review yang Membuat Tim Lebih Cepat',
+      excerpt: 'Code review bukan hanya tentang menemukan bug — ini tentang mentransfer pengetahuan. Berikut lima kebiasaan yang mengubah review dari ritual menjadi investasi.',
+      category: 'Engineering',
+      date: 'Jul 2026',
+      isoDate: '2026-07-20',
+    },
+    {
+      title: 'Animasi Scroll yang Tidak Mengganggu: Panduan Praktis',
+      excerpt: 'Terlalu banyak animasi adalah musuh konsentrasi pengguna. Pelajari kapan harus menggunakan scroll reveal, seberapa lambat, dan bagaimana menghormati preferensi reduced motion.',
+      category: 'Interaksi',
+      date: 'Jun 2026',
+      isoDate: '2026-06-10',
+    },
+  ];
+
+  // =========================================================
+  // siteShell — Layout global: navbar, scroll, cursor glow
+  // =========================================================
   Alpine.data('siteShell', () => ({
     mobileOpen: false,
     scrolled: false,
     showTop: false,
     activeSection: 'beranda',
+    navItems,
+    skills,
+    services,
+    jobs,
+    testimonials,
+    blogPosts,
 
     init() {
-      // Throttle via requestAnimationFrame agar scroll tetap mulus di perangkat mobile.
-      let ticking = false;
+      // Scroll handler
       const onScroll = () => {
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(() => {
-          this.scrolled = window.scrollY > 12;
-          this.showTop = window.scrollY > 480;
-          this.updateActiveSection();
-          ticking = false;
-        });
+        this.scrolled = window.scrollY > 12;
+        this.showTop = window.scrollY > 480;
+        this.updateActiveSection();
       };
       onScroll();
       window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll, { passive: true });
 
-      // Cursor glow ambient (desktop saja)
+      // Cursor glow — throttle via requestAnimationFrame
       const glow = document.getElementById('cursor-glow');
       if (glow && window.matchMedia('(hover: hover)').matches) {
+        let rafId = null;
         window.addEventListener('mousemove', (e) => {
-          glow.style.left = e.clientX + 'px';
-          glow.style.top = e.clientY + 'px';
+          if (rafId) return;
+          rafId = requestAnimationFrame(() => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+            rafId = null;
+          });
         });
       }
+
+      // Tutup mobile menu saat klik di luar
+      document.addEventListener('click', (e) => {
+        if (this.mobileOpen && !e.target.closest('header')) {
+          this.mobileOpen = false;
+        }
+      });
     },
 
     updateActiveSection() {
-      const sections = ['beranda', 'tentang', 'keahlian', 'proyek', 'pengalaman', 'kontak'];
-      for (const id of sections) {
+      const sectionIds = ['beranda', 'tentang', 'keahlian', 'layanan', 'proyek', 'pengalaman', 'testimoni', 'blog', 'kontak'];
+      for (const id of sectionIds) {
         const el = document.getElementById(id);
         if (!el) continue;
         const rect = el.getBoundingClientRect();
@@ -62,9 +196,10 @@ document.addEventListener('alpine:init', () => {
     },
   }));
 
-  // ---- Reveal on scroll (generik, dipakai untuk judul seksi) ----
+  // =========================================================
+  // reveal — Scroll reveal generik via IntersectionObserver
+  // =========================================================
   Alpine.data('reveal', () => ({
-    visible: false,
     init() {
       this.$el.classList.add('reveal');
       const obs = new IntersectionObserver(
@@ -76,18 +211,23 @@ document.addEventListener('alpine:init', () => {
             }
           });
         },
-        { threshold: 0.2 }
+        { threshold: 0.15 }
       );
       obs.observe(this.$el);
     },
   }));
 
-  // ---- Cincin progres skill, animasi saat masuk viewport ----
+  // =========================================================
+  // skillRing — Animasi progress ring saat masuk viewport
+  // =========================================================
   Alpine.data('skillRing', (percent) => ({
     percent,
     animated: false,
+
     init() {
       const circle = this.$refs.bar;
+      if (!circle) return;
+
       const radius = circle.r.baseVal.value;
       const circumference = 2 * Math.PI * radius;
       circle.style.strokeDasharray = `${circumference}`;
@@ -106,20 +246,36 @@ document.addEventListener('alpine:init', () => {
             }
           });
         },
-        { threshold: 0.4 }
+        { threshold: 0.3 }
       );
       obs.observe(this.$el);
     },
   }));
 
-  // ---- Modal detail proyek via SweetAlert2 ----
+  // =========================================================
+  // projectModal — Modal detail proyek & unduh CV
+  // =========================================================
   Alpine.data('projectModal', () => ({
-    open(title, desc, stack, year) {
+    open(title, desc, stack, year, link) {
+      const linkButton = link
+        ? `<div style="margin-top:16px;text-align:right;">
+             <a href="${link}" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:8px 16px;background:linear-gradient(145deg,#dfb87a,#d1a86a);color:#1b1e27;font-weight:600;font-size:13px;border-radius:10px;text-decoration:none;">Kunjungi Tautan &rarr;</a>
+           </div>`
+        : '';
+
       Swal.fire({
         title,
-        html: `<p style="color:#b7bdca;text-align:left;line-height:1.6;margin-bottom:10px">${desc}</p>
-               <p style="text-align:left;font-size:13px;color:#8890a3">Tahun: ${year}</p>
-               <p style="text-align:left;font-size:13px;color:#8890a3">Teknologi: ${stack}</p>`,
+        html: `
+          <p style="color:#b7bdca;text-align:left;line-height:1.7;margin-bottom:12px;font-size:14px">${desc}</p>
+          <div style="background:#171a21;padding:12px 14px;border-radius:12px;margin-bottom:12px;border:1px solid #2a3040;">
+            <p style="text-align:left;font-size:13px;color:#8890a3;margin-bottom:4px">
+              <strong style="color:#d1a86a">Tahun Rilis:</strong> ${year}
+            </p>
+            <p style="text-align:left;font-size:13px;color:#8890a3;margin:0">
+              <strong style="color:#d1a86a">Teknologi:</strong> ${stack}
+            </p>
+          </div>
+          ${linkButton}`,
         background: '#1e222c',
         color: '#e9e8e4',
         confirmButtonText: 'Tutup',
@@ -141,22 +297,28 @@ document.addEventListener('alpine:init', () => {
     },
   }));
 
-  // ---- Form kontak ----
+  // =========================================================
+  // contactForm — Form kontak dengan validasi email proper
+  // =========================================================
   Alpine.data('contactForm', () => ({
-    form: { name: '', email: '', message: '' },
+    form: { name: '', email: '', subject: '', message: '' },
     sending: false,
 
+    isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    },
+
     submit() {
-      if (!this.form.name || !this.form.email || !this.form.message) {
-        Swal.fire({
-          title: 'Formulir belum lengkap',
-          text: 'Isi nama, email, dan pesan sebelum mengirim.',
-          icon: 'warning',
-          background: '#1e222c',
-          color: '#e9e8e4',
-          confirmButtonColor: '#d1a86a',
-        });
-        return;
+      const { name, email, message } = this.form;
+
+      if (!name.trim()) {
+        return this._warn('Nama wajib diisi', 'Masukkan nama lengkap Anda.');
+      }
+      if (!this.isValidEmail(email)) {
+        return this._warn('Email tidak valid', 'Masukkan alamat email yang benar, mis. nama@email.com.');
+      }
+      if (!message.trim() || message.trim().length < 10) {
+        return this._warn('Pesan terlalu singkat', 'Tulis pesan minimal 10 karakter.');
       }
 
       this.sending = true;
@@ -164,16 +326,28 @@ document.addEventListener('alpine:init', () => {
       setTimeout(() => {
         this.sending = false;
         Swal.fire({
-          title: 'Pesan terkirim',
-          text: `Terima kasih, ${this.form.name}. Balasan akan dikirim ke ${this.form.email}.`,
+          title: 'Pesan terkirim! 🎉',
+          text: `Terima kasih, ${name.trim()}. Balasan akan dikirim ke ${email.trim()} dalam 1–2 hari kerja.`,
           icon: 'success',
           background: '#1e222c',
           color: '#e9e8e4',
-          confirmButtonText: 'Sip',
+          confirmButtonText: 'Sip, terima kasih!',
           confirmButtonColor: '#d1a86a',
         });
-        this.form = { name: '', email: '', message: '' };
+        this.form = { name: '', email: '', subject: '', message: '' };
       }, 900);
     },
+
+    _warn(title, text) {
+      Swal.fire({
+        title,
+        text,
+        icon: 'warning',
+        background: '#1e222c',
+        color: '#e9e8e4',
+        confirmButtonColor: '#d1a86a',
+      });
+    },
   }));
+
 });
