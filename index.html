@@ -23,7 +23,26 @@
   <link rel="canonical" href="https://devprick11.id">
 
   <!-- Tailwind CSS -->
+  <script>
+    // Filter peringatan development Tailwind Play CDN agar console browser tetap bersih
+    const _twWarn = console.warn;
+    console.warn = function (...args) {
+      if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com should not be used in production')) return;
+      _twWarn.apply(console, args);
+    };
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          screens: {
+            'xs': '480px',
+          }
+        }
+      }
+    };
+  </script>
   <!-- Alpine.js Intersect plugin (harus dimuat sebelum core) -->
   <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
   <!-- Alpine.js core -->
@@ -108,7 +127,7 @@
     </nav>
 
     <!-- Menu mobile -->
-    <div x-show="mobileOpen" x-transition x-cloak class="neu-flat-sm mt-3 p-4 md:hidden" role="dialog" aria-modal="true"
+    <div x-show="mobileOpen" x-transition x-cloak @click.outside="mobileOpen = false" @keydown.escape.window="mobileOpen = false" class="neu-flat-sm mt-3 p-4 md:hidden" role="dialog" aria-modal="true"
       aria-label="Menu navigasi mobile">
       <ul class="flex flex-col gap-1 text-sm" role="list">
         <template x-for="item in [...navItems, {id:'kontak', label:'Kontak'}]" :key="item.id">
@@ -123,31 +142,31 @@
   </header>
 
   <!-- ============ HERO ============ -->
-  <section id="beranda" class="relative pt-36 pb-24 px-5 sm:px-8 md:px-12 max-w-7xl mx-auto" aria-label="Beranda">
-    <div class="grid md:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
+  <section id="beranda" class="relative pt-28 xs:pt-32 sm:pt-36 pb-16 sm:pb-24 px-5 sm:px-8 md:px-12 max-w-7xl mx-auto" aria-label="Beranda">
+    <div class="grid md:grid-cols-[1.1fr_0.9fr] gap-8 sm:gap-12 lg:gap-16 items-center">
 
       <!-- Teks -->
       <div class="hero-seq relative z-10 order-2 md:order-1">
-        <div class="inline-flex items-center gap-2 neu-flat-sm px-4 py-2 text-xs text-muted mb-7">
+        <div class="inline-flex items-center gap-2 neu-flat-sm px-4 py-2 text-xs text-muted mb-5 sm:mb-7">
           <span class="status-dot" aria-hidden="true"></span>
           <span>Tersedia untuk proyek baru — mulai November 2026</span>
         </div>
 
-        <h1 class="font-display font-semibold leading-[1.05] text-4xl sm:text-5xl lg:text-[3.4rem] mb-6">
+        <h1 class="font-display font-semibold leading-[1.05] text-3xl xs:text-4xl sm:text-5xl lg:text-[3.4rem] mb-4 sm:mb-6">
           Membangun web &amp; aplikasi
           <span class="text-accent">cepat, fungsional &amp; elegan.</span>
         </h1>
 
-        <p class="max-prose text-muted text-base sm:text-lg leading-relaxed mb-9">
+        <p class="max-prose text-muted text-sm sm:text-base lg:text-lg leading-relaxed mb-7 sm:mb-9">
           Saya Devp Rick11, mahasiswa Universitas Sains dan Teknologi Jayapura (USTJ) Papua.
-          Aktif mendalami web development sejak 2021 dan berkontribusi di komunitas SaCode Papua (2023).
+          Aktif mendalami web development sejak 2021 dan belajar di komunitas SaCode Papua (2023).
           Kini fokus sebagai Full Stack Developer yang terbiasa mengeksekusi joki dan pengerjaan proyek web &amp; web
           application dari konsep hingga siap rilis.
         </p>
 
-        <div class="flex flex-wrap items-center gap-4 mb-10">
+        <div class="flex flex-wrap items-center gap-3 sm:gap-4 mb-8 sm:mb-10">
           <button @click="scrollTo('proyek')" class="btn-primary">Lihat karya saya</button>
-          <button x-data="projectModal" @click="downloadCv()" class="btn-ghost">Unduh CV</button>
+          <button @click="openCv()" class="btn-ghost">Unduh CV</button>
         </div>
 
         <div class="flex items-center gap-3">
@@ -179,41 +198,36 @@
       </div>
 
       <!-- Visual -->
-      <div class="relative flex items-center justify-center order-1 md:order-2 mb-8 md:mb-0">
-        <div class="accent-glow w-64 h-64 sm:w-72 sm:h-72 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+      <div class="relative flex items-center justify-center order-1 md:order-2 mb-6 sm:mb-8 md:mb-0 overflow-visible">
+        <div class="accent-glow w-52 h-52 sm:w-64 sm:h-64 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           aria-hidden="true"></div>
 
-        <svg class="spin-slow absolute w-[300px] h-[300px] sm:w-[340px] sm:h-[340px] opacity-30" viewBox="0 0 340 340"
+        <svg class="spin-slow absolute w-[240px] h-[240px] xs:w-[280px] xs:h-[280px] sm:w-[320px] sm:h-[320px] opacity-30" viewBox="0 0 340 340"
           fill="none" aria-hidden="true">
           <circle cx="170" cy="170" r="165" stroke="var(--accent)" stroke-width="1" stroke-dasharray="2 10" />
         </svg>
 
         <div
-          class="hero-portrait neu-convex w-52 h-52 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 flex items-center justify-center relative z-10">
+          class="hero-portrait neu-convex w-44 h-44 xs:w-52 xs:h-52 sm:w-64 sm:h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 flex items-center justify-center relative z-10">
           <div
             class="w-[88%] h-[88%] rounded-full overflow-hidden neu-inset flex items-center justify-center relative group">
-            <!-- Tip: Ganti tag svg di bawah dengan <img src="foto.jpg" alt="Devp Rick11" class="w-full h-full object-cover rounded-full"> jika ingin menggunakan foto asli -->
             <img src="img/hero-image.png" alt="Devp Rick11" class="w-full h-full object-cover rounded-full">
-            <!-- <svg viewBox="0 0 200 200" class="w-[92%] h-[92%] translate-y-2 select-none" fill="none" aria-hidden="true">
-              <circle cx="100" cy="72" r="34" fill="#2a3040" />
-              <path d="M40 190c6-42 34-66 60-66s54 24 60 66" fill="#2a3040" />
-            </svg> -->
           </div>
         </div>
 
         <!-- Floating Badge: 5+ Tahun Pengalaman -->
         <div
-          class="neu-flat-sm float-slow absolute -left-1 xs:-left-4 sm:-left-8 top-1 xs:top-3 sm:top-6 px-3 py-2 sm:px-4 sm:py-3 z-20 shadow-md backdrop-blur-sm"
+          class="neu-flat-sm float-slow absolute -left-2 xs:-left-4 sm:-left-8 top-0 xs:top-3 sm:top-6 px-2.5 py-1.5 xs:px-3 xs:py-2 sm:px-4 sm:py-3 z-20 shadow-md backdrop-blur-sm"
           aria-label="5 tahun pengalaman">
-          <p class="font-display font-semibold text-lg sm:text-xl text-accent leading-tight">5+</p>
-          <p class="text-[10px] sm:text-xs text-muted whitespace-nowrap">tahun pengalaman</p>
+          <p class="font-display font-semibold text-base xs:text-lg sm:text-xl text-accent leading-tight">5+</p>
+          <p class="text-[9px] xs:text-[10px] sm:text-xs text-muted whitespace-nowrap">tahun pengalaman</p>
         </div>
 
         <!-- Floating Badge: 50+ Proyek Selesai -->
         <div
-          class="neu-flat-sm float-slower absolute -right-1 xs:-right-4 sm:-right-8 bottom-1 xs:bottom-3 sm:bottom-8 px-3 py-2 sm:px-4 sm:py-3 z-20 shadow-md backdrop-blur-sm"
+          class="neu-flat-sm float-slower absolute -right-2 xs:-right-4 sm:-right-8 bottom-0 xs:bottom-3 sm:bottom-8 px-2.5 py-1.5 xs:px-3 xs:py-2 sm:px-4 sm:py-3 z-20 shadow-md backdrop-blur-sm"
           aria-label="50 proyek selesai">
-          <p class="font-display font-semibold text-lg sm:text-xl text-accent leading-tight">50+</p>
+          <p class="font-display font-semibold text-base xs:text-lg sm:text-xl text-accent leading-tight">50+</p>
           <p class="text-[10px] sm:text-xs text-muted whitespace-nowrap">proyek selesai</p>
         </div>
       </div>
@@ -221,27 +235,27 @@
   </section>
 
   <!-- ============ TENTANG ============ -->
-  <section id="tentang" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-20" aria-label="Tentang saya">
-    <div x-data="reveal" class="grid md:grid-cols-2 gap-10 lg:gap-14 items-center">
+  <section id="tentang" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-14 sm:py-20" aria-label="Tentang saya">
+    <div x-data="reveal" class="grid md:grid-cols-2 gap-8 sm:gap-10 lg:gap-14 items-center">
 
       <!-- Stat cards (di bawah narasi pada mobile, di kiri pada desktop) -->
-      <div class="order-2 md:order-1 grid grid-cols-2 gap-3.5 sm:gap-5">
-        <div class="neu-flat p-4 sm:p-6 flex flex-col justify-center">
-          <p class="font-display text-2xl sm:text-3xl font-semibold text-accent mb-1 leading-tight">2021</p>
-          <p class="text-xs sm:text-sm text-muted">mulai menekuni web dev</p>
+      <div class="order-2 md:order-1 grid grid-cols-2 gap-3 xs:gap-3.5 sm:gap-5">
+        <div class="neu-flat p-3.5 xs:p-4 sm:p-6 flex flex-col justify-center">
+          <p class="font-display text-xl xs:text-2xl sm:text-3xl font-semibold text-accent mb-1 leading-tight">2021</p>
+          <p class="text-[11px] xs:text-xs sm:text-sm text-muted">mulai menekuni web dev</p>
         </div>
-        <div class="neu-flat p-4 sm:p-6 md:mt-8 flex flex-col justify-center">
-          <p class="font-display text-2xl sm:text-3xl font-semibold text-accent mb-1 leading-tight">USTJ</p>
-          <p class="text-xs sm:text-sm text-muted">kampus sains &amp; teknologi Papua</p>
+        <div class="neu-flat p-3.5 xs:p-4 sm:p-6 md:mt-8 flex flex-col justify-center">
+          <p class="font-display text-xl xs:text-2xl sm:text-3xl font-semibold text-accent mb-1 leading-tight">USTJ</p>
+          <p class="text-[11px] xs:text-xs sm:text-sm text-muted">kampus sains &amp; teknologi Papua</p>
         </div>
-        <div class="neu-flat p-4 sm:p-6 flex flex-col justify-center">
-          <p class="font-display text-2xl sm:text-3xl font-semibold text-accent mb-1 leading-tight">2023</p>
-          <p class="text-xs sm:text-sm text-muted">kontributor di SaCode Papua</p>
+        <div class="neu-flat p-3.5 xs:p-4 sm:p-6 flex flex-col justify-center">
+          <p class="font-display text-xl xs:text-2xl sm:text-3xl font-semibold text-accent mb-1 leading-tight">2023</p>
+          <p class="text-[11px] xs:text-xs sm:text-sm text-muted">belajar di SaCode Papua</p>
         </div>
-        <div class="neu-flat p-4 sm:p-6 md:mt-8 flex flex-col justify-center">
-          <p class="font-display text-xl sm:text-2xl lg:text-3xl font-semibold text-accent mb-1 leading-tight">Full
+        <div class="neu-flat p-3.5 xs:p-4 sm:p-6 md:mt-8 flex flex-col justify-center">
+          <p class="font-display text-lg xs:text-xl sm:text-2xl lg:text-3xl font-semibold text-accent mb-1 leading-tight">Full
             Stack</p>
-          <p class="text-xs sm:text-sm text-muted">joki &amp; developer proyek web app</p>
+          <p class="text-[11px] xs:text-xs sm:text-sm text-muted">joki &amp; developer proyek web app</p>
         </div>
       </div>
 
@@ -258,9 +272,10 @@
             pemrograman web hingga arsitektur aplikasi modern.
           </p>
           <p>
-            Pada tahun <strong>2023</strong>, saya mendapat kesempatan berharga untuk belajar dan berkontribusi langsung
-            di komunitas teknologi <strong>SaCode Papua</strong> — wadah yang mengasah kemampuan kolaborasi, pemecahan
-            masalah teknis, serta komitmen untuk memajukan talenta digital di tanah Papua.
+            Pada tahun <strong>2023</strong>, saya menimba ilmu dan belajar intensif di komunitas teknologi
+            <strong>SaCode Papua</strong> — wadah yang memperdalam pemahaman fundamental hingga lanjutan web
+            development,
+            logika algoritma pemrograman, dan kolaborasi teknis di tanah Papua.
           </p>
           <p>
             Saat ini, saya aktif bekerja secara independen sebagai <strong>Full Stack Developer</strong> yang siap
@@ -271,8 +286,7 @@
         </div>
 
         <div class="mt-7 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4">
-          <button x-data="projectModal" @click="downloadCv()"
-            class="btn-primary text-sm justify-center !py-3 !px-5 focus-ring">
+          <button @click="openCv()" class="btn-primary text-sm justify-center !py-3 !px-5 focus-ring">
             Unduh CV saya
           </button>
           <button @click="scrollTo('proyek')" class="btn-ghost text-sm justify-center !py-3 !px-5 focus-ring">
@@ -284,24 +298,31 @@
   </section>
 
   <!-- ============ KEAHLIAN ============ -->
-  <section id="keahlian" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-20" aria-label="Keahlian">
-    <div x-data="reveal" class="mb-14 max-w-xl">
+  <section id="keahlian" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-14 sm:py-20" aria-label="Keahlian">
+    <div x-data="reveal" class="mb-10 sm:mb-14 max-w-xl">
       <p class="text-accent text-sm font-medium mb-3">Keahlian</p>
-      <h2 class="font-display font-semibold text-3xl sm:text-4xl leading-tight">
+      <h2 class="font-display font-semibold text-2xl sm:text-3xl lg:text-4xl leading-tight">
         Alat dan bahasa yang saya pakai setiap hari
       </h2>
     </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 xs:gap-4 sm:gap-5 lg:gap-6">
       <template x-for="skill in skills" :key="skill.name">
-        <div class="neu-flat p-5 sm:p-6 flex flex-col items-center text-center gap-4" x-data="skillRing(skill.level)"
-          :aria-label="skill.name + ': ' + skill.level + ' persen penguasaan'">
-          <svg class="ring-progress w-20 h-20 sm:w-24 sm:h-24" viewBox="0 0 90 90" aria-hidden="true">
-            <circle cx="45" cy="45" r="40" fill="none" stroke="var(--shadow-dark)" stroke-width="7" />
-            <circle x-ref="bar" class="bar" cx="45" cy="45" r="40" fill="none" stroke="var(--accent)" stroke-width="7"
-              stroke-linecap="round" />
-          </svg>
-          <p class="font-display font-medium text-sm leading-snug" x-text="skill.name"></p>
+        <div class="neu-flat p-3.5 xs:p-4 sm:p-5 lg:p-6 flex flex-col items-center text-center gap-3 xs:gap-4 group"
+          x-data="skillRing(skill.level)" :aria-label="skill.name + ': ' + skill.level + ' persen penguasaan'">
+          <!-- Circle Progress dengan Icon/SVG di Tengah -->
+          <div class="skill-ring-wrap relative w-16 h-16 xs:w-20 xs:h-20 sm:w-24 sm:h-24 flex items-center justify-center">
+            <svg class="ring-progress absolute inset-0 w-full h-full" viewBox="0 0 90 90" aria-hidden="true">
+              <circle cx="45" cy="45" r="40" fill="none" stroke="var(--shadow-dark)" stroke-width="7" />
+              <circle x-ref="bar" class="bar" cx="45" cy="45" r="40" fill="none" stroke="var(--accent)" stroke-width="7"
+                stroke-linecap="round" />
+            </svg>
+            <!-- Icon/SVG Keahlian di Tengah Ring -->
+            <div
+              class="skill-icon-center text-accent w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 flex items-center justify-center z-10 transition-transform duration-300 group-hover:scale-110"
+              x-html="skill.icon" aria-hidden="true"></div>
+          </div>
+          <p class="font-display font-medium text-xs xs:text-sm leading-snug" x-text="skill.name"></p>
           <p class="text-xs text-muted" x-text="skill.level + '% penguasaan'"></p>
         </div>
       </template>
@@ -309,31 +330,37 @@
   </section>
 
   <!-- ============ LAYANAN ============ -->
-  <section id="layanan" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-20" aria-label="Layanan">
-    <div x-data="reveal" class="mb-14 max-w-xl">
+  <section id="layanan" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-14 sm:py-20" aria-label="Layanan">
+    <div x-data="reveal" class="mb-10 sm:mb-14 max-w-xl">
       <p class="text-accent text-sm font-medium mb-3">Apa yang saya tawarkan</p>
-      <h2 class="font-display font-semibold text-3xl sm:text-4xl leading-tight">
+      <h2 class="font-display font-semibold text-2xl sm:text-3xl lg:text-4xl leading-tight">
         Layanan yang dapat membantu produk Anda
       </h2>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-5 sm:gap-6">
       <template x-for="(svc, i) in services" :key="svc.title">
         <div class="reveal" x-intersect.once="$el.classList.add('in-view')" :style="`transition-delay:${i * 120}ms`">
-          <div class="service-card neu-flat p-7 sm:p-8 h-full flex flex-col gap-5">
+          <div class="service-card neu-flat p-5 xs:p-6 sm:p-7 lg:p-8 h-full flex flex-col gap-4 sm:gap-5">
             <!-- Ikon -->
-            <div class="neu-icon-btn !w-14 !h-14 shrink-0" aria-hidden="true">
-              <span x-html="svc.icon" class="w-7 h-7"></span>
+            <div class="neu-icon-btn !w-12 !h-12 xs:!w-14 xs:!h-14 shrink-0" aria-hidden="true">
+              <span x-html="svc.icon" class="w-6 h-6 xs:w-7 xs:h-7"></span>
             </div>
             <div>
-              <h3 class="font-display font-semibold text-xl mb-3" x-text="svc.title"></h3>
+              <h3 class="font-display font-semibold text-lg sm:text-xl mb-2 sm:mb-3" x-text="svc.title"></h3>
               <p class="text-muted text-sm leading-relaxed" x-text="svc.desc"></p>
             </div>
-            <ul class="mt-auto flex flex-wrap gap-2">
+            <ul class="mt-auto flex flex-wrap gap-1.5 xs:gap-2 pt-2">
               <template x-for="tag in svc.tags" :key="tag">
-                <li class="neu-flat text-xs px-3 py-1.5 rounded-full text-muted" x-text="tag"></li>
+                <li class="neu-flat text-xs px-2.5 xs:px-3 py-1 xs:py-1.5 rounded-full text-muted border border-[var(--shadow-light)]"
+                  x-text="tag"></li>
               </template>
             </ul>
+            <!-- Tombol Detail Layanan & Alur Kerja -->
+            <button @click="openService(svc)"
+              class="btn-ghost text-xs !py-2.5 !px-4 mt-1 justify-center w-full focus-ring">
+              Detail Layanan &amp; Alur Kerja →
+            </button>
           </div>
         </div>
       </template>
@@ -341,27 +368,28 @@
   </section>
 
   <!-- ============ PROYEK ============ -->
-  <section id="proyek" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-20" aria-label="Proyek terpilih"
+  <section id="proyek" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-14 sm:py-20" aria-label="Proyek terpilih"
     x-data="projectSection">
-    <div class="text-center max-w-xl mx-auto mb-10 reveal" x-intersect.once="$el.classList.add('in-view')">
+    <div class="text-center max-w-xl mx-auto mb-8 sm:mb-10 reveal" x-intersect.once="$el.classList.add('in-view')">
       <p class="text-accent font-semibold text-sm mb-3">Karya Terpilih</p>
-      <h2 class="font-display text-3xl sm:text-4xl font-semibold">Proyek yang pernah saya kerjakan</h2>
+      <h2 class="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold">Proyek yang pernah saya kerjakan</h2>
       <span class="grow-line accent-gradient mt-4 mx-auto" x-intersect.once="$el.classList.add('in-view')"></span>
     </div>
 
     <!-- Filter tab -->
-    <div class="flex justify-center mb-12">
-      <div class="neu-inset-sm inline-flex flex-wrap justify-center gap-1 p-1.5" role="tablist"
+    <!-- Filter tab: scrollable di mobile -->
+    <div class="flex justify-center mb-8 sm:mb-12 overflow-x-auto pb-1">
+      <div class="neu-inset-sm inline-flex gap-1 p-1.5 min-w-max" role="tablist"
         aria-label="Filter kategori proyek">
         <template x-for="cat in ['Semua','Web App','UI/UX','Mobile']" :key="cat">
-          <button @click="setFilter(cat)" class="neu-tab px-4 sm:px-5 py-2 text-sm focus-ring"
+          <button @click="setFilter(cat)" class="neu-tab px-3.5 xs:px-4 sm:px-5 py-2 text-sm focus-ring"
             :class="{ 'active': filter === cat }" x-text="cat" role="tab" :aria-selected="filter === cat"></button>
         </template>
       </div>
     </div>
 
     <!-- Grid proyek (Maksimal 3 kartu awal per kategori) -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-5 sm:gap-6">
       <template x-for="(project, pi) in visibleProjects" :key="project.title">
         <div class="reveal" x-intersect.once="$el.classList.add('in-view')"
           :style="`transition-delay:${(pi % 3) * 100}ms`">
@@ -418,20 +446,29 @@
 
             <!-- Card Actions -->
             <div class="flex items-center gap-2 pt-2 border-t border-[var(--shadow-light)]" x-data="projectModal">
-              <button
-                @click="open(project.title, project.desc, project.tags.join(', '), project.year, project.link, project.img)"
-                class="btn-primary text-xs !py-2.5 !px-4 flex-1 justify-center focus-ring">
+              <button @click="open(project)" class="btn-primary text-xs !py-2.5 !px-4 flex-1 justify-center focus-ring">
                 Detail Proyek
               </button>
-              <button
-                @click="open(project.title, project.desc, project.tags.join(', '), project.year, project.link, project.img)"
-                class="neu-icon-btn !w-10 !h-10 shrink-0" aria-label="Lihat pratinjau">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                  <polyline points="15 3 21 3 21 9"></polyline>
-                  <line x1="10" y1="14" x2="21" y2="3"></line>
-                </svg>
-              </button>
+              <template x-if="project.link && project.link !== '#'">
+                <a :href="project.link" target="_blank" rel="noopener noreferrer"
+                  class="neu-icon-btn !w-10 !h-10 shrink-0" aria-label="Buka web app langsung">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </a>
+              </template>
+              <template x-if="!project.link || project.link === '#'">
+                <button @click="open(project)" class="neu-icon-btn !w-10 !h-10 shrink-0 opacity-75"
+                  aria-label="Lihat detail sistem">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                </button>
+              </template>
             </div>
           </div>
         </div>
@@ -453,21 +490,21 @@
   </section>
 
   <!-- ============ PENGALAMAN ============ -->
-  <section id="pengalaman" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-20" aria-label="Pengalaman kerja">
-    <div x-data="reveal" class="mb-14 max-w-xl">
+  <section id="pengalaman" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-14 sm:py-20" aria-label="Pengalaman kerja">
+    <div x-data="reveal" class="mb-10 sm:mb-14 max-w-xl">
       <p class="text-accent text-sm font-medium mb-3">Perjalanan karier</p>
-      <h2 class="font-display font-semibold text-3xl sm:text-4xl leading-tight">Pengalaman kerja</h2>
+      <h2 class="font-display font-semibold text-2xl sm:text-3xl lg:text-4xl leading-tight">Pengalaman kerja</h2>
     </div>
 
-    <div class="relative pl-8 sm:pl-10">
+    <div class="relative pl-7 xs:pl-8 sm:pl-10">
       <div class="timeline-line absolute left-[7px] top-1 bottom-1 w-[2px]" style="background:var(--shadow-light)"
         aria-hidden="true"></div>
 
       <template x-for="job in jobs" :key="job.role">
-        <div class="relative mb-8 sm:mb-10 last:mb-0" x-data="reveal">
-          <span class="absolute -left-8 sm:-left-10 top-1.5 w-4 h-4 rounded-full"
+        <div class="relative mb-7 xs:mb-8 sm:mb-10 last:mb-0" x-data="reveal">
+          <span class="absolute -left-7 xs:-left-8 sm:-left-10 top-1.5 w-4 h-4 rounded-full"
             style="background:var(--accent); box-shadow:0 0 0 4px var(--bg)" aria-hidden="true"></span>
-          <div class="neu-flat p-5 sm:p-6">
+          <div class="neu-flat p-4 xs:p-5 sm:p-6">
             <div class="flex flex-wrap items-baseline justify-between gap-2 mb-2">
               <h3 class="font-display font-semibold text-base sm:text-lg" x-text="job.role"></h3>
               <span class="text-xs text-muted shrink-0" x-text="job.period"></span>
@@ -481,18 +518,18 @@
   </section>
 
   <!-- ============ TESTIMONI ============ -->
-  <section id="testimoni" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-20" aria-label="Testimoni klien">
-    <div x-data="reveal" class="mb-14 max-w-xl">
+  <section id="testimoni" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-14 sm:py-20" aria-label="Testimoni klien">
+    <div x-data="reveal" class="mb-10 sm:mb-14 max-w-xl">
       <p class="text-accent text-sm font-medium mb-3">Apa kata klien</p>
-      <h2 class="font-display font-semibold text-3xl sm:text-4xl leading-tight">
+      <h2 class="font-display font-semibold text-2xl sm:text-3xl lg:text-4xl leading-tight">
         Kepercayaan yang menggerakkan saya
       </h2>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-5 sm:gap-6">
       <template x-for="(t, i) in testimonials" :key="t.name">
         <div class="reveal" x-intersect.once="$el.classList.add('in-view')" :style="`transition-delay:${i * 120}ms`">
-          <div class="testimonial-card neu-flat p-6 sm:p-7 h-full flex flex-col gap-5">
+          <div class="testimonial-card neu-flat p-5 xs:p-6 sm:p-7 h-full flex flex-col gap-4 sm:gap-5">
             <!-- Bintang -->
             <div class="flex gap-1" :aria-label="t.stars + ' dari 5 bintang'">
               <template x-for="s in t.stars" :key="s">
@@ -524,11 +561,11 @@
   </section>
 
   <!-- ============ BLOG / CATATAN ============ -->
-  <section id="blog" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-20" aria-label="Blog dan catatan">
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
+  <section id="blog" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-14 sm:py-20" aria-label="Blog dan catatan">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 mb-10 sm:mb-14">
       <div x-data="reveal" class="max-w-xl">
         <p class="text-accent text-sm font-medium mb-3">Catatan &amp; tulisan</p>
-        <h2 class="font-display font-semibold text-3xl sm:text-4xl leading-tight">
+        <h2 class="font-display font-semibold text-2xl sm:text-3xl lg:text-4xl leading-tight">
           Pikiran dari balik layar
         </h2>
       </div>
@@ -538,7 +575,7 @@
       </button>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-5 sm:gap-6">
       <template x-for="(post, i) in blogPosts" :key="post.title">
         <div class="reveal" x-intersect.once="$el.classList.add('in-view')" :style="`transition-delay:${i * 120}ms`">
           <article class="blog-card neu-flat p-6 sm:p-7 h-full flex flex-col gap-4" x-data="blogModal">
@@ -558,7 +595,7 @@
             </div>
             <h3 class="font-display font-semibold text-base sm:text-lg leading-snug" x-text="post.title"></h3>
             <p class="text-muted text-sm leading-relaxed flex-1" x-text="post.excerpt"></p>
-            <button @click="open(post.title, post.category, post.date, post.excerpt)"
+            <button @click="open(post.title, post.category, post.date, post.content)"
               class="text-accent text-xs font-semibold hover:underline underline-offset-4 focus-ring w-fit text-left">
               Baca selengkapnya →
             </button>
@@ -569,13 +606,13 @@
   </section>
 
   <!-- ============ KONTAK ============ -->
-  <section id="kontak" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-20" aria-label="Kontak">
+  <section id="kontak" class="px-5 sm:px-8 md:px-12 max-w-7xl mx-auto py-14 sm:py-20" aria-label="Kontak">
     <div x-data="reveal" class="neu-flat p-6 sm:p-8 lg:p-12 grid md:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-12">
 
       <!-- Kiri: info -->
       <div>
         <p class="text-accent text-sm font-medium mb-3">Kontak</p>
-        <h2 class="font-display font-semibold text-3xl sm:text-4xl leading-tight mb-5">
+        <h2 class="font-display font-semibold text-2xl sm:text-3xl lg:text-4xl leading-tight mb-5">
           Punya proyek dalam pikiran? Mari bicarakan.
         </h2>
         <p class="text-muted leading-relaxed mb-8 max-prose">
@@ -725,6 +762,150 @@
       </div>
     </div>
   </footer>
+
+  <!-- ============ DOKUMEN CV RESMI UNTUK CETAK & SIMPAN PDF (PRINT-ONLY) ============ -->
+  <div id="cv-print-area" class="cv-print-container" aria-hidden="true">
+    <!-- Header CV -->
+    <header class="cv-print-header">
+      <div class="cv-header-left">
+        <h1 class="cv-print-name">Devp Rick11</h1>
+        <p class="cv-print-role">Full Stack Web Developer &amp; UI/UX Specialist</p>
+        <p class="cv-print-sub">Mahasiswa Universitas Sains dan Teknologi Jayapura (USTJ) Papua</p>
+      </div>
+      <div class="cv-header-right">
+        <ul class="cv-contact-list">
+          <li><strong>Lokasi:</strong> Jayapura, Papua, Indonesia</li>
+          <li><strong>Email:</strong> halo@devprick11.id</li>
+          <li><strong>WhatsApp:</strong> +62 812-1537-6865</li>
+          <li><strong>Website:</strong> https://devprick11.id</li>
+          <li><strong>GitHub:</strong> github.com/ipo-rk</li>
+        </ul>
+      </div>
+    </header>
+
+    <!-- Ringkasan Profesional -->
+    <section class="cv-print-section">
+      <h2 class="cv-section-title">Ringkasan Profesional</h2>
+      <p class="cv-summary-text">
+        Pengembang Web Full Stack independen yang berdomisili di Jayapura, Papua dengan fokus pada rekayasa sistem
+        informasi dan aplikasi web modern yang cepat, aman, dan responsif. Aktif mendalami pemrograman web sejak tahun
+        <strong>2021</strong> dan menimba ilmu di komunitas teknologi <strong>SaCode Papua (2023)</strong>. Menguasai
+        arsitektur backend <strong>Laravel/PHP &amp; MySQL</strong> serta antarmuka modern <strong>Tailwind CSS &amp;
+          Alpine.js</strong>. Berpengalaman mengerjakan berbagai proyek joki dan pesanan sistem instansi pemerintah
+        daerah, asrama mahasiswa, dan unit usaha percetakan dengan komitmen kode bersih, teruji, dan bergaransi tuntas.
+      </p>
+    </section>
+
+    <!-- Pendidikan & Pelatihan -->
+    <section class="cv-print-section">
+      <h2 class="cv-section-title">Pendidikan &amp; Pelatihan</h2>
+      <div class="cv-entry">
+        <div class="cv-entry-header">
+          <strong class="cv-institution">Universitas Sains dan Teknologi Jayapura (USTJ)</strong>
+          <span class="cv-date">2021 — Sekarang</span>
+        </div>
+        <div class="cv-degree">Sarjana (S1) Teknik Informatika &bull; Jayapura, Papua</div>
+        <p class="cv-desc">Fokus pada rekayasa perangkat lunak web, perancangan basis data relasional, dan implementasi
+          sistem informasi.</p>
+      </div>
+      <div class="cv-entry">
+        <div class="cv-entry-header">
+          <strong class="cv-institution">Komunitas Teknologi SaCode Papua</strong>
+          <span class="cv-date">2023</span>
+        </div>
+        <div class="cv-degree">Program Belajar Intensif Pemrograman Web &amp; Kolaborasi Coding</div>
+        <p class="cv-desc">Menimba ilmu pengembangan web full stack modern (HTML, CSS, JS, PHP, MySQL), algoritma
+          pemrograman, dan best practices sistem web.</p>
+      </div>
+    </section>
+
+    <!-- Pengalaman Kerja -->
+    <section class="cv-print-section">
+      <h2 class="cv-section-title">Pengalaman Kerja</h2>
+      <div class="cv-entry">
+        <div class="cv-entry-header">
+          <strong class="cv-institution">Full Stack Web Developer (Freelance &amp; Joki Proyek)</strong>
+          <span class="cv-date">2023 — Sekarang</span>
+        </div>
+        <div class="cv-degree">Mandiri &bull; Klien Pemerintahan, Akademik, &amp; UMKM</div>
+        <ul class="cv-bullet-list">
+          <li>Menganalisis kebutuhan sistem, merancang skema database MySQL ternormalisasi, dan membangun backend
+            Laravel yang aman.</li>
+          <li>Mengembangkan antarmuka pengguna responsif (Mobile, Tablet, Desktop) dengan standar visual tinggi dan
+            performa optimal.</li>
+          <li>Mengintegrasikan fitur-fitur mutakhir: presensi QR Code dinamis, pelacakan kurir Leaflet.js real-time, dan
+            manajemen hak akses multi-peran (RBAC).</li>
+          <li>Memberikan layanan pengerjaan cepat dengan garansi revisi, pengujian fungsi, serta pendampingan teknis dan
+            serah terima source code tuntas.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Portofolio Proyek Unggulan -->
+    <section class="cv-print-section">
+      <h2 class="cv-section-title">Portofolio Proyek Unggulan</h2>
+      <div class="cv-project-grid">
+        <div class="cv-project-card">
+          <div class="cv-entry-header">
+            <strong>SIMGK Deiyai — Monitoring Pelayanan Gereja</strong>
+            <span class="cv-date">2026</span>
+          </div>
+          <div class="cv-tech-badge">Laravel, Alpine.js, Chart.js, Vanilla JS</div>
+          <p class="cv-desc">Aplikasi monitoring pelayanan gereja terpadu: dashboard statistik real-time, manajemen
+            klasis dan jemaat, warta &amp; jadwal ibadah, rekapitulasi keuangan, dan pencatatan log keamanan.</p>
+        </div>
+
+        <div class="cv-project-card">
+          <div class="cv-entry-header">
+            <strong>SIMASRA Deiyai — Monitoring Asrama Mahasiswa</strong>
+            <span class="cv-date">2026</span>
+          </div>
+          <div class="cv-tech-badge">Laravel, MySQL, Tailwind CSS, Alpine.js, SweetAlert2</div>
+          <p class="cv-desc">Sistem pengelolaan asrama mahasiswa: presensi mandiri berbasis QR Code dinamis, alokasi
+            kamar &amp; aset gedung, pengajuan izin bermalam, dan rekapitulasi kedisiplinan penghuni.</p>
+        </div>
+
+        <div class="cv-project-card">
+          <div class="cv-entry-header">
+            <strong>KUGIYAI.TOBE.ID — Manajemen Percetakan Digital</strong>
+            <span class="cv-date">2026</span>
+          </div>
+          <div class="cv-tech-badge">Laravel, Tailwind CSS, Leaflet.js, OpenStreetMap, QR Code</div>
+          <p class="cv-desc">Sistem bisnis percetakan terintegrasi: kalkulator tarif baliho dinamis, antrean mesin
+            produksi cetak, faktur digital QR Code, dan pelacakan kurir via peta Leaflet real-time.</p>
+        </div>
+
+        <div class="cv-project-card">
+          <div class="cv-entry-header">
+            <strong>SIPARS Deiyai — Pengelolaan Arsip Surat Elektronik</strong>
+            <span class="cv-date">2025</span>
+          </div>
+          <div class="cv-tech-badge">Laravel, MySQL, Tailwind CSS, Alpine.js, PDF Viewer</div>
+          <p class="cv-desc">Digitalisasi tata kelola arsip dinas, registrasi surat masuk dan keluar, disposisi
+            berjenjang kepala dinas ke bidang terkait, audit trail, dan pencarian cepat arsip PDF.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Keahlian Teknis -->
+    <section class="cv-print-section">
+      <h2 class="cv-section-title">Keahlian Teknis &amp; Tooling</h2>
+      <div class="cv-skills-layout">
+        <div class="cv-skill-col">
+          <strong>Backend &amp; Database:</strong>
+          <p>PHP 8+, Laravel MVC, MySQL, RESTful API Architecture, Authentication &amp; RBAC, LocalStorage.</p>
+        </div>
+        <div class="cv-skill-col">
+          <strong>Frontend &amp; Desain:</strong>
+          <p>Tailwind CSS, Alpine.js, Vanilla JavaScript (ES6+), HTML5 Semantik, CSS3, Neumorphism Soft-UI, Figma.</p>
+        </div>
+        <div class="cv-skill-col">
+          <strong>Tools &amp; Ekosistem:</strong>
+          <p>Git, GitHub Workflow, Leaflet.js Maps, Chart.js, SweetAlert2, Postman, VS Code, Browser DevTools.</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <!-- Floating Action Button (FAB WhatsApp) -->
   <a href="https://wa.me/6281215376865?text=Halo%20Devp%20Rick11%2C%20saya%20tertarik%20untuk%20berdiskusi%20tentang%20proyek."

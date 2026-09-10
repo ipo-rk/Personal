@@ -345,6 +345,9 @@ svg {
 .hero-portrait {
   animation: scaleIn 1s cubic-bezier(0.19, 1, 0.22, 1) 0.35s forwards;
   opacity: 0;
+  /* Clamp: tidak pernah melewati viewport width */
+  max-width: min(20rem, 88vw);
+  max-height: min(20rem, 88vw);
 }
 
 /* =========================================================
@@ -431,6 +434,13 @@ svg {
 /* =========================================================
    12. SKILL PROGRESS RING
    ========================================================= */
+.skill-ring-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .ring-progress {
   transform: rotate(-90deg);
   transform-origin: 50% 50%;
@@ -440,6 +450,22 @@ svg {
   stroke-dasharray: 251.2;
   stroke-dashoffset: 251.2;
   transition: stroke-dashoffset 1.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.skill-icon-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.3s ease;
+}
+
+.neu-flat:hover .skill-icon-center {
+  transform: scale(1.15);
+  color: #f3cf95;
 }
 
 /* =========================================================
@@ -725,10 +751,31 @@ svg {
     14px 14px 28px var(--shadow-dark),
     -12px -12px 26px var(--shadow-light) !important;
   border: 1px solid rgba(209, 168, 106, 0.2) !important;
+  /* Pastikan tidak overflow di semua device */
+  max-width: min(620px, calc(100vw - 2rem)) !important;
+  overflow-y: auto;
+  max-height: 90vh;
 }
 .swal2-popup.swal-neu .swal2-title {
   color: var(--text) !important;
   font-family: "Space Grotesk", sans-serif !important;
+  font-size: clamp(1rem, 4vw, 1.35rem) !important;
+  word-break: break-word;
+}
+/* Konten html dalam modal: scroll internal bila perlu */
+.swal2-popup.swal-neu .swal2-html-container {
+  overflow: visible !important;
+  overflow-x: hidden !important;
+}
+/* Tombol modal stack di mobile */
+.swal2-popup.swal-neu .swal2-actions {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.swal2-popup.swal-neu .swal2-confirm,
+.swal2-popup.swal-neu .swal2-cancel {
+  min-width: 120px;
+  font-size: 0.875rem !important;
 }
 
 /* =========================================================
@@ -813,71 +860,208 @@ select option {
 }
 
 /* =========================================================
-   24. RESPONSIVE — FINE-TUNING (100% DEVICE COMPLIANCE)
+   24. RESPONSIVE — KOMPREHENSIF (100% DEVICE COMPLIANCE)
    ========================================================= */
 
-/* Extra-small (<360px): layar smartphone sangat kecil */
-@media (max-width: 360px) {
+/* ─── Base: min-width 320px sudah di body global ─── */
+
+/* ─── 1. Extra-small — xs: <360px (Samsung Galaxy A, iPhone SE gen1) ─── */
+@media (max-width: 359px) {
+  /* Section padding lebih ringkas */
+  section[id] {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    padding-top: 3.5rem !important;
+    padding-bottom: 3.5rem !important;
+  }
+
+  /* Tombol primary & ghost melebar penuh */
   .btn-primary,
   .btn-ghost {
-    padding: 0.7rem 1.1rem;
+    padding: 0.7rem 1rem;
     font-size: 0.8rem;
     width: 100%;
     justify-content: center;
+    white-space: normal;
+    text-align: center;
   }
 
-  /* Badge hero diposisikan sangat kompak agar tidak terpotong */
+  /* Badge hero super kompak */
   .float-slow,
   .float-slower {
-    padding: 0.35rem 0.6rem;
-    font-size: 0.65rem;
+    padding: 0.3rem 0.55rem;
+    font-size: 0.6rem;
   }
-
   .float-slow p:first-child,
   .float-slower p:first-child {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 
-  /* FAB WA lebih fleksibel di layar sempit */
+  /* FAB WA */
   .fab-wa {
-    width: 48px;
-    height: 48px;
-    bottom: 1rem;
-    left: 1rem;
+    width: 46px;
+    height: 46px;
+    bottom: 0.75rem;
+    left: 0.75rem;
+  }
+
+  /* Skill ring: lebih kecil agar fit 2-col */
+  .skill-ring-wrap {
+    width: 4.5rem !important;
+    height: 4.5rem !important;
+  }
+
+  /* Timeline dot: jangan keluar viewport */
+  .timeline-left-fix {
+    padding-left: 1.5rem;
+  }
+
+  /* SweetAlert popup: full width */
+  .swal2-popup.swal-neu {
+    width: calc(100vw - 1.5rem) !important;
+    max-width: calc(100vw - 1.5rem) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 1.25rem 1rem !important;
+  }
+  .swal2-popup.swal-neu .swal2-title {
+    font-size: 1rem !important;
   }
 }
 
-/* Mobile & Tablet Portrait (<768px): tata letak responsif */
-@media (max-width: 768px) {
-  /* Mencegah tab overflow */
-  .neu-tab {
-    padding: 0.45rem 0.85rem;
-    font-size: 0.8rem;
+/* ─── 2. Small — sm: 360–639px (smartphone biasa) ─── */
+@media (min-width: 360px) and (max-width: 639px) {
+  /* SweetAlert popup: full width responsif */
+  .swal2-popup.swal-neu {
+    width: calc(100vw - 2rem) !important;
+    max-width: 100% !important;
+    border-radius: var(--radius-md) !important;
+  }
+  .swal2-popup.swal-neu .swal2-title {
+    font-size: 1.05rem !important;
   }
 
+  /* cv-modal-sheet: pastikan tidak overflow di modal */
+  .cv-modal-sheet {
+    max-height: 72vh;
+    font-size: 13px;
+  }
+}
+
+/* ─── 3. Mobile umum: <640px ─── */
+@media (max-width: 639px) {
   /* Hilangkan cursor glow di perangkat sentuh */
   #cursor-glow {
     display: none !important;
   }
 
-  /* Jaga float badge di mobile agar tetap di luar batas portrait visual */
-  .float-slow {
+  /* Navbar hero pada layar sempit */
+  .float-slow,
+  .float-slower {
     transform-origin: top left;
   }
-  .float-slower {
-    transform-origin: bottom right;
+
+  /* Filter tabs proyek: bisa scroll horizontal jika overflow */
+  .neu-inset-sm.inline-flex {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    justify-content: flex-start;
+    max-width: 100%;
+  }
+  .neu-inset-sm.inline-flex::-webkit-scrollbar {
+    display: none;
   }
 
-  /* Padding timeline */
+  /* Tombol filter tab jangan terpotong */
+  .neu-tab {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.78rem;
+    flex-shrink: 0;
+  }
+
+  /* Skill ring wrap — lebih kecil di mobile */
+  .skill-ring-wrap {
+    width: 4.75rem;
+    height: 4.75rem;
+  }
+
+  /* Layanan grid: 1 kolom di mobile portrait */
+  /* (grid sudah pakai sm:grid-cols-2, handled oleh Tailwind) */
+
+  /* Form: stack label + input rapi */
+  input[id^="contact-"],
+  select[id^="contact-"],
+  textarea[id^="contact-"] {
+    font-size: 16px; /* Mencegah auto-zoom di iOS Safari */
+  }
+
+  /* Footer nav: wrap dengan gap yang nyaman */
+  footer nav ul {
+    gap: 0.5rem 0.875rem;
+  }
+
+  /* Tombol scroll-to-top dan FAB: jangan overlap */
+  .fab-wa {
+    bottom: 1.25rem;
+    left: 1.25rem;
+  }
+  button.fixed.bottom-6.right-6,
+  button.fixed.bottom-8.right-8 {
+    bottom: 1.25rem;
+    right: 1.25rem;
+  }
+}
+
+/* ─── 4. Tablet Portrait — md: 640–767px ─── */
+@media (min-width: 640px) and (max-width: 767px) {
+  /* SweetAlert: lebih lebar dari xs tapi tetap responsif */
+  .swal2-popup.swal-neu {
+    width: min(560px, calc(100vw - 2.5rem)) !important;
+    max-width: 100% !important;
+  }
+
+  .cv-modal-sheet {
+    max-height: 68vh;
+  }
+}
+
+/* ─── 5. Tablet Landscape — md: 768–1023px ─── */
+@media (max-width: 1023px) {
+  .neu-card {
+    will-change: auto;
+  }
+
+  /* Tooltip FAB WA jangan muncul karena bisa overflow layar */
+  .fab-wa > span.hidden {
+    display: none !important;
+  }
+
+  /* Timeline: hindari dot terlalu ke kiri */
   .timeline-left-fix {
     padding-left: 2rem;
   }
 }
 
-/* Tablet Landscape (<1024px): penyesuaian grid */
-@media (max-width: 1024px) {
-  .neu-card {
-    will-change: auto;
+/* ─── 6. Desktop L — 1280px+ ─── */
+@media (min-width: 1280px) {
+  /* Perlebar grid proyek di layar besar */
+  .skill-ring-wrap {
+    width: 6.5rem;
+    height: 6.5rem;
+  }
+}
+
+/* ─── 7. Hover-capable device: aktifkan tilt, glow, shimmer ─── */
+@media (hover: none) {
+  /* Nonaktifkan efek tilt 3D untuk perangkat touch */
+  .tilt {
+    transform: none !important;
+  }
+  /* Nonaktifkan shimmer hover di touch */
+  .neu-card:hover .neu-inset::before,
+  .service-card:hover::before {
+    display: none !important;
   }
 }
 
@@ -905,5 +1089,347 @@ select option {
     transition: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+}
+
+/* =========================================================
+   26. CURRICULUM VITAE (MODAL SHEET SCREEN STYLES)
+   ========================================================= */
+#cv-print-area {
+  display: none !important;
+}
+
+.cv-modal-sheet {
+  text-align: left;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--text);
+  max-height: 65vh;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.cv-sheet-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--shadow-light);
+}
+
+.cv-sheet-avatar {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid var(--accent);
+  box-shadow: 2px 2px 8px var(--shadow-dark);
+}
+
+.cv-sheet-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cv-sheet-title h3 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 2px;
+}
+
+.cv-role {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0 0 3px;
+}
+
+.cv-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.cv-sheet-section {
+  margin-bottom: 16px;
+}
+
+.cv-sheet-section h4 {
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 6px;
+}
+
+.cv-card-item {
+  background: var(--bg);
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  border: 1px solid var(--shadow-light);
+}
+
+.cv-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.cv-badge {
+  font-size: 11.5px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.cv-list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--text-muted);
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+
+.cv-list li {
+  margin-bottom: 4px;
+}
+
+.cv-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cv-tags span {
+  background: var(--bg);
+  border: 1px solid var(--shadow-light);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+}
+
+/* =========================================================
+   27. PRINT MEDIA STYLES (DOKUMEN CV PRESISI TINGGI A4)
+   ========================================================= */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm 12mm 15mm;
+  }
+
+  /* Reset layout halaman */
+  html,
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+    font-family:
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      sans-serif !important;
+    font-size: 9.5pt !important;
+    line-height: 1.45 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Sembunyikan SEMUA elemen website dan modal popup */
+  body > *:not(#cv-print-area) {
+    display: none !important;
+  }
+  .swal2-container,
+  .swal2-backdrop-show,
+  #cursor-glow,
+  .fab-wa {
+    display: none !important;
+  }
+
+  /* Tampilkan hanya dokumen CV */
+  #cv-print-area {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  .cv-print-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 10px !important;
+    border-bottom: 2.5px solid #b8860b !important;
+  }
+
+  .cv-print-name {
+    font-size: 20pt !important;
+    font-weight: 800 !important;
+    color: #111827 !important;
+    margin: 0 0 3px 0 !important;
+    font-family: "Space Grotesk", sans-serif !important;
+    letter-spacing: -0.5px !important;
+  }
+
+  .cv-print-role {
+    font-size: 11pt !important;
+    font-weight: 700 !important;
+    color: #92400e !important;
+    margin: 0 0 3px 0 !important;
+  }
+
+  .cv-print-sub {
+    font-size: 8.5pt !important;
+    color: #4b5563 !important;
+    margin: 0 !important;
+  }
+
+  .cv-contact-list {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    text-align: right !important;
+    font-size: 8pt !important;
+    color: #374151 !important;
+    line-height: 1.45 !important;
+  }
+
+  .cv-contact-list strong {
+    color: #111827 !important;
+  }
+
+  .cv-print-section {
+    margin-bottom: 10px !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .cv-section-title {
+    font-size: 10.5pt !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.8px !important;
+    color: #111827 !important;
+    border-bottom: 1.5px solid #e5e7eb !important;
+    padding-bottom: 3px !important;
+    margin: 0 0 6px 0 !important;
+    font-family: "Space Grotesk", sans-serif !important;
+  }
+
+  .cv-summary-text {
+    font-size: 9pt !important;
+    color: #374151 !important;
+    line-height: 1.5 !important;
+    margin: 0 !important;
+    text-align: justify !important;
+  }
+
+  .cv-entry {
+    margin-bottom: 6px !important;
+    break-inside: avoid !important;
+  }
+
+  .cv-entry-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: baseline !important;
+    font-size: 9.5pt !important;
+  }
+
+  .cv-institution {
+    font-weight: 700 !important;
+    color: #111827 !important;
+  }
+
+  .cv-date {
+    font-size: 8.5pt !important;
+    font-weight: 700 !important;
+    color: #92400e !important;
+  }
+
+  .cv-degree {
+    font-size: 8.5pt !important;
+    font-weight: 600 !important;
+    color: #4b5563 !important;
+    margin-bottom: 2px !important;
+  }
+
+  .cv-desc {
+    font-size: 8.5pt !important;
+    color: #4b5563 !important;
+    margin: 0 !important;
+    line-height: 1.4 !important;
+  }
+
+  .cv-bullet-list {
+    margin: 3px 0 0 0 !important;
+    padding-left: 16px !important;
+    font-size: 8.5pt !important;
+    color: #374151 !important;
+    line-height: 1.45 !important;
+  }
+
+  .cv-bullet-list li {
+    margin-bottom: 2px !important;
+  }
+
+  .cv-project-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .cv-project-card {
+    border: 1px solid #e5e7eb !important;
+    border-radius: 6px !important;
+    padding: 6px 8px !important;
+    background: #fdfdfd !important;
+    break-inside: avoid !important;
+  }
+
+  .cv-project-card .cv-entry-header {
+    font-size: 8.5pt !important;
+  }
+
+  .cv-tech-badge {
+    font-size: 7.5pt !important;
+    font-weight: 700 !important;
+    color: #92400e !important;
+    margin: 1px 0 3px 0 !important;
+  }
+
+  .cv-skills-layout {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 8px !important;
+    font-size: 8pt !important;
+  }
+
+  .cv-skill-col strong {
+    display: block !important;
+    color: #111827 !important;
+    margin-bottom: 2px !important;
+    font-size: 8.5pt !important;
+  }
+
+  .cv-skill-col p {
+    margin: 0 !important;
+    color: #4b5563 !important;
+    line-height: 1.35 !important;
   }
 }
